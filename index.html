@@ -12,73 +12,38 @@
     theme: {
       extend: {
         colors: {
-          "secondary": "#9d4300",
-          "inverse-on-surface": "#eaf1ff",
-          "on-secondary-container": "#5c2400",
-          "surface-container-highest": "#d3e4fe",
-          "surface-variant": "#d3e4fe",
-          "surface": "#f8f9ff",
-          "outline-variant": "#c3c6d7",
-          "surface-bright": "#f8f9ff",
-          "on-primary-container": "#eeefff",
-          "on-background": "#0b1c30",
-          "error": "#ba1a1a",
-          "on-surface": "#0b1c30",
-          "inverse-surface": "#213145",
-          "on-primary": "#ffffff",
-          "outline": "#737686",
-          "surface-container-high": "#dce9ff",
-          "on-surface-variant": "#434655",
-          "on-error": "#ffffff",
-          "on-primary-fixed-variant": "#003ea8",
-          "inverse-primary": "#b4c5ff",
-          "tertiary-fixed": "#dae2fd",
-          "on-secondary-fixed-variant": "#783200",
-          "primary-container": "#2563eb",
-          "on-tertiary": "#ffffff",
-          "surface-container-lowest": "#ffffff",
-          "secondary-container": "#fd761a",
-          "primary-fixed": "#dbe1ff",
-          "background": "#f8f9ff",
-          "error-container": "#ffdad6",
-          "tertiary-container": "#656d84",
-          "surface-container-low": "#eff4ff",
-          "surface-container": "#e5eeff",
-          "surface-dim": "#cbdbf5",
-          "on-tertiary-container": "#eef0ff",
-          "primary-fixed-dim": "#b4c5ff",
-          "on-primary-fixed": "#00174b",
-          "tertiary": "#4d556b",
-          "surface-tint": "#0053db",
-          "on-tertiary-fixed-variant": "#3f465c",
-          "tertiary-fixed-dim": "#bec6e0",
-          "secondary-fixed-dim": "#ffb690",
-          "primary": "#004ac6",
-          "on-secondary-fixed": "#341100",
-          "secondary-fixed": "#ffdbca",
-          "on-error-container": "#93000a",
+          "secondary": "#9d4300","inverse-on-surface": "#eaf1ff","on-secondary-container": "#5c2400",
+          "surface-container-highest": "#d3e4fe","surface-variant": "#d3e4fe","surface": "#f8f9ff",
+          "outline-variant": "#c3c6d7","surface-bright": "#f8f9ff","on-primary-container": "#eeefff",
+          "on-background": "#0b1c30","error": "#ba1a1a","on-surface": "#0b1c30",
+          "inverse-surface": "#213145","on-primary": "#ffffff","outline": "#737686",
+          "surface-container-high": "#dce9ff","on-surface-variant": "#434655","on-error": "#ffffff",
+          "on-primary-fixed-variant": "#003ea8","inverse-primary": "#b4c5ff","tertiary-fixed": "#dae2fd",
+          "on-secondary-fixed-variant": "#783200","primary-container": "#2563eb","on-tertiary": "#ffffff",
+          "surface-container-lowest": "#ffffff","secondary-container": "#fd761a","primary-fixed": "#dbe1ff",
+          "background": "#f8f9ff","error-container": "#ffdad6","tertiary-container": "#656d84",
+          "surface-container-low": "#eff4ff","surface-container": "#e5eeff","surface-dim": "#cbdbf5",
+          "on-tertiary-container": "#eef0ff","primary-fixed-dim": "#b4c5ff","on-primary-fixed": "#00174b",
+          "tertiary": "#4d556b","surface-tint": "#0053db","on-tertiary-fixed-variant": "#3f465c",
+          "tertiary-fixed-dim": "#bec6e0","secondary-fixed-dim": "#ffb690","primary": "#004ac6",
+          "on-secondary-fixed": "#341100","secondary-fixed": "#ffdbca","on-error-container": "#93000a",
           "on-secondary": "#ffffff"
         },
-        borderRadius: {
-          DEFAULT: "0.125rem", lg: "0.25rem", xl: "0.5rem", full: "0.75rem"
-        },
-        spacing: {
-          gutter: "16px", unit: "4px", margin: "24px", "container-max": "1440px"
-        },
+        borderRadius: { DEFAULT: "0.125rem", lg: "0.25rem", xl: "0.5rem", full: "0.75rem" },
+        spacing: { gutter: "16px", unit: "4px", margin: "24px", "container-max": "1440px" },
         fontFamily: {
-          "body-md": ["Hanken Grotesk"], "headline-lg": ["Hanken Grotesk"],
-          "body-sm": ["Hanken Grotesk"], "label-mono": ["JetBrains Mono"],
-          "headline-md": ["Hanken Grotesk"], "body-lg": ["Hanken Grotesk"],
+          "body-md": ["Hanken Grotesk"],"headline-lg": ["Hanken Grotesk"],"body-sm": ["Hanken Grotesk"],
+          "label-mono": ["JetBrains Mono"],"headline-md": ["Hanken Grotesk"],"body-lg": ["Hanken Grotesk"],
           "display": ["Hanken Grotesk"]
         },
         fontSize: {
-          "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }],
-          "headline-lg": ["28px", { lineHeight: "36px", fontWeight: "600" }],
-          "body-sm": ["12px", { lineHeight: "16px", fontWeight: "400" }],
-          "label-mono": ["12px", { lineHeight: "16px", letterSpacing: "0.02em", fontWeight: "500" }],
-          "headline-md": ["20px", { lineHeight: "28px", fontWeight: "600" }],
-          "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }],
-          "display": ["36px", { lineHeight: "44px", fontWeight: "700" }]
+          "body-md": ["14px",{"lineHeight":"20px","fontWeight":"400"}],
+          "headline-lg": ["28px",{"lineHeight":"36px","fontWeight":"600"}],
+          "body-sm": ["12px",{"lineHeight":"16px","fontWeight":"400"}],
+          "label-mono": ["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"500"}],
+          "headline-md": ["20px",{"lineHeight":"28px","fontWeight":"600"}],
+          "body-lg": ["16px",{"lineHeight":"24px","fontWeight":"400"}],
+          "display": ["36px",{"lineHeight":"44px","fontWeight":"700"}]
         }
       }
     }
@@ -91,14 +56,82 @@
   .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
   .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
   .custom-scrollbar::-webkit-scrollbar-thumb { background: #c3c6d7; border-radius: 10px; }
-  .sticky-header th { position: sticky; top: 0; z-index: 20; }
   .loading-pulse { animation: pulse 1.5s ease-in-out infinite; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+  @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+  @keyframes fadeIn { from{opacity:0;transform:scale(.96)} to{opacity:1;transform:scale(1)} }
+
+  /* ── Cabeceras fijas en ambas tablas ── */
+  .table-wrap { overflow: auto; }
+  .table-wrap table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: #213145;
+  }
+
+  /* ── Código en una sola línea ── */
+  .cod-cell { white-space: nowrap; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #004ac6; font-weight: 700; }
+
+  /* ── Checkbox personalizado ── */
+  .chk-row { width: 16px; height: 16px; accent-color: #004ac6; cursor: pointer; }
+
+  /* ── Modal overlay ── */
+  #modal-clave {
+    display: none;
+    position: fixed; inset: 0; z-index: 999;
+    background: rgba(11,28,48,.55);
+    backdrop-filter: blur(4px);
+    align-items: center; justify-content: center;
+  }
+  #modal-clave.open { display: flex; }
+  #modal-box {
+    background: #fff;
+    border-radius: 12px;
+    padding: 32px 28px;
+    width: 340px;
+    box-shadow: 0 20px 60px rgba(0,74,198,.18);
+    animation: fadeIn .2s ease;
+  }
+  #modal-box h3 { font-size: 18px; font-weight: 700; color: #0b1c30; margin-bottom: 6px; }
+  #modal-box p  { font-size: 13px; color: #434655; margin-bottom: 20px; }
+  #input-clave  {
+    width: 100%; padding: 10px 12px;
+    border: 1.5px solid #c3c6d7; border-radius: 8px;
+    font-size: 14px; outline: none; letter-spacing: 4px;
+    margin-bottom: 8px;
+  }
+  #input-clave:focus { border-color: #004ac6; }
+  #msg-clave { font-size: 12px; color: #ba1a1a; min-height: 18px; margin-bottom: 14px; }
+  .modal-btns { display: flex; gap: 10px; }
+  .btn-modal-ok {
+    flex: 1; padding: 9px; background: #004ac6; color: #fff;
+    border: none; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer;
+  }
+  .btn-modal-ok:hover { background: #003ea8; }
+  .btn-modal-cancel {
+    flex: 1; padding: 9px; background: #f1f4ff; color: #004ac6;
+    border: 1.5px solid #c3c6d7; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer;
+  }
 </style>
 </head>
 <body class="text-on-surface bg-background">
 
-<!-- TopNavBar -->
+<!-- ═══ MODAL CLAVE ═══ -->
+<div id="modal-clave">
+  <div id="modal-box">
+    <h3>🔒 Descargar CSV</h3>
+    <p>Ingresa la clave de acceso para continuar con la descarga.</p>
+    <input id="input-clave" type="password" placeholder="••••" maxlength="10" autocomplete="off">
+    <div id="msg-clave"></div>
+    <div class="modal-btns">
+      <button class="btn-modal-cancel" id="btn-modal-cancel">Cancelar</button>
+      <button class="btn-modal-ok" id="btn-modal-ok">Descargar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TOP NAV ═══ -->
 <header class="bg-white border-b border-outline-variant sticky top-0 z-50">
   <div class="flex justify-between items-center h-16 px-gutter w-full max-w-container-max mx-auto">
     <div class="flex items-center gap-8">
@@ -130,9 +163,8 @@
 
 <main class="max-w-container-max mx-auto px-gutter py-8 space-y-8">
 
-  <!-- SECTION: Resumen de Avance -->
+  <!-- ═══ KPIs ═══ -->
   <section class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-    <!-- Izquierda: KPIs 1 y 2 -->
     <div class="lg:col-span-3 flex flex-col gap-4">
       <div class="bg-white border border-outline-variant p-5 rounded-lg shadow-sm">
         <p class="text-on-surface-variant font-body-sm text-body-sm uppercase tracking-wider font-semibold mb-1">Cantidad Inicial</p>
@@ -152,7 +184,6 @@
       </div>
     </div>
 
-    <!-- Centro: Donut -->
     <div class="lg:col-span-6 flex flex-col items-center justify-center p-8">
       <div class="relative w-64 h-64">
         <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
@@ -160,7 +191,7 @@
             stroke-dasharray="251.2" stroke-dashoffset="0" stroke-linecap="round" stroke-width="8"></circle>
           <circle id="donut-arc" class="text-primary stroke-current" cx="50" cy="50" fill="transparent" r="40"
             stroke-dasharray="251.2" stroke-dashoffset="251.2" stroke-linecap="round" stroke-width="8"
-            style="transition: stroke-dashoffset 0.8s ease;"></circle>
+            style="transition:stroke-dashoffset .8s ease;"></circle>
         </svg>
         <div class="absolute inset-0 flex flex-col items-center justify-center">
           <span class="font-display text-[48px] text-on-surface font-extrabold leading-tight" id="donut-pct">—%</span>
@@ -179,7 +210,6 @@
       </div>
     </div>
 
-    <!-- Derecha: KPIs 3 y 4 -->
     <div class="lg:col-span-3 flex flex-col gap-4">
       <div class="bg-white border border-outline-variant p-5 rounded-lg shadow-sm">
         <p class="text-on-surface-variant font-body-sm text-body-sm uppercase tracking-wider font-semibold mb-1">Cantidad de Códigos</p>
@@ -200,12 +230,13 @@
     </div>
   </section>
 
-  <!-- Two Column Layout -->
+  <!-- ═══ DOS COLUMNAS ═══ -->
   <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
 
-    <!-- SECTION: Detalle por Código (25%) -->
+    <!-- DETALLE CÓDIGO (25%) -->
     <section class="lg:col-span-1 bg-white border border-outline-variant rounded-lg overflow-hidden shadow-sm flex flex-col h-[600px]">
-      <div class="p-4 border-b border-outline-variant flex flex-col gap-3 bg-white">
+      <!-- cabecera panel -->
+      <div class="p-4 border-b border-outline-variant flex flex-col gap-3 bg-white flex-shrink-0">
         <div class="flex items-center justify-between">
           <h2 class="font-headline-md text-[16px] text-on-surface font-bold">Detalle Código</h2>
           <button id="btn-export-detalle" class="text-primary hover:bg-primary-fixed p-1.5 rounded-lg transition-colors" title="Descargar CSV">
@@ -229,14 +260,15 @@
           </div>
         </div>
       </div>
-      <div class="overflow-y-auto custom-scrollbar flex-grow">
-        <table class="w-full text-left border-collapse">
-          <thead class="sticky-header">
+      <!-- tabla con scroll y cabecera fija -->
+      <div class="table-wrap flex-grow" style="overflow:auto;">
+        <table class="w-full text-left border-collapse" style="min-width:100%;">
+          <thead>
             <tr class="bg-inverse-surface">
-              <th class="px-4 py-3 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white">Código</th>
-              <th class="px-4 py-3 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white">Total</th>
-              <th class="px-4 py-3 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white">Pend.</th>
-              <th class="px-4 py-3 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white">Obs.</th>
+              <th class="px-3 py-3 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Código</th>
+              <th class="px-3 py-3 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Total</th>
+              <th class="px-3 py-3 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Pend.</th>
+              <th class="px-3 py-3 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Obs.</th>
             </tr>
           </thead>
           <tbody id="tbody-detalle" class="text-body-md divide-y divide-outline-variant">
@@ -246,52 +278,51 @@
       </div>
     </section>
 
-    <!-- SECTION: Registro (75%) -->
+    <!-- REGISTRO (75%) -->
     <section class="lg:col-span-3 bg-white border border-outline-variant rounded-lg overflow-hidden shadow-sm flex flex-col h-[600px]">
-      <div class="p-6 border-b border-outline-variant bg-white flex flex-col md:flex-row justify-between items-center gap-4">
-        <h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+      <!-- cabecera panel -->
+      <div class="p-4 border-b border-outline-variant bg-white flex flex-col md:flex-row justify-between items-center gap-3 flex-shrink-0">
+        <h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2 whitespace-nowrap">
           <span class="material-symbols-outlined text-primary">history</span>Registro
         </h2>
-        <div class="flex flex-wrap gap-3 w-full md:w-auto">
-          <div class="relative flex-grow md:w-40">
-            <input id="filtro-fecha-ini" type="date" class="pl-3 pr-3 py-2 border border-outline-variant rounded-lg text-body-sm w-full focus:ring-1 focus:ring-primary focus:border-primary outline-none" placeholder="Fecha Inicio">
-          </div>
-          <div class="relative flex-grow md:w-40">
-            <input id="filtro-fecha-fin" type="date" class="pl-3 pr-3 py-2 border border-outline-variant rounded-lg text-body-sm w-full focus:ring-1 focus:ring-primary focus:border-primary outline-none" placeholder="Fecha Fin">
-          </div>
-          <div class="relative flex-grow md:w-40">
-            <input id="filtro-lpn" class="pl-3 pr-3 py-2 border border-outline-variant rounded-lg text-body-sm w-full focus:ring-1 focus:ring-primary focus:border-primary outline-none" placeholder="LPN..." type="text">
-          </div>
-          <div class="relative flex-grow md:w-40">
-            <input id="filtro-codigo-reg" class="pl-3 pr-3 py-2 border border-outline-variant rounded-lg text-body-sm w-full focus:ring-1 focus:ring-primary focus:border-primary outline-none" placeholder="Código..." type="text">
-          </div>
-          <button id="btn-export-registro" class="text-primary hover:bg-primary-fixed p-1.5 rounded-lg transition-colors" title="Exportar CSV">
+        <div class="flex flex-wrap gap-2 w-full md:w-auto items-center">
+          <input id="filtro-fecha-ini" type="date" class="px-3 py-2 border border-outline-variant rounded-lg text-body-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none" style="min-width:130px;">
+          <input id="filtro-fecha-fin" type="date" class="px-3 py-2 border border-outline-variant rounded-lg text-body-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none" style="min-width:130px;">
+          <input id="filtro-lpn" class="px-3 py-2 border border-outline-variant rounded-lg text-body-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none" placeholder="LPN..." type="text" style="min-width:100px;">
+          <input id="filtro-codigo-reg" class="px-3 py-2 border border-outline-variant rounded-lg text-body-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none" placeholder="Código..." type="text" style="min-width:110px;">
+          <!-- contador seleccionados -->
+          <span id="lbl-seleccion" class="text-body-sm text-on-surface-variant font-medium hidden">0 sel.</span>
+          <button id="btn-export-registro" class="text-primary hover:bg-primary-fixed p-1.5 rounded-lg transition-colors" title="Exportar CSV (filtrado o seleccionado)">
             <span class="material-symbols-outlined text-[20px]">download</span>
           </button>
         </div>
       </div>
-      <div class="overflow-x-auto overflow-y-auto custom-scrollbar flex-grow">
-        <table class="w-full text-left border-collapse min-w-[1400px]">
-          <thead class="sticky-header">
+      <!-- tabla con scroll y cabecera fija -->
+      <div class="table-wrap flex-grow" style="overflow:auto;">
+        <table class="text-left border-collapse" style="min-width:1480px; width:100%;">
+          <thead>
             <tr class="bg-inverse-surface">
-              <th class="px-4 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Registro</th>
-              <th class="px-4 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Usuario</th>
-              <th class="px-4 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">LPN</th>
-              <th class="px-4 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Código</th>
-              <th class="px-4 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Descripción</th>
-              <th class="px-4 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">EAN13</th>
-              <th class="px-4 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">EAN14</th>
-              <th class="px-4 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap text-center">FxE</th>
-              <th class="px-4 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Familia</th>
-              <th class="px-4 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Lote</th>
-              <th class="px-4 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Expira</th>
-              <th class="px-4 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap text-center">Físico</th>
-              <th class="px-4 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Estatus Lote</th>
-              <th class="px-4 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Expira Nueva</th>
+              <th class="px-3 py-4 text-white" style="width:36px;">
+                <input type="checkbox" id="chk-all" class="chk-row" title="Seleccionar todo">
+              </th>
+              <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Registro</th>
+              <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Usuario</th>
+              <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">LPN</th>
+              <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Código</th>
+              <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Descripción</th>
+              <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">EAN13</th>
+              <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">EAN14</th>
+              <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap text-center">FxE</th>
+              <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Familia</th>
+              <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Lote</th>
+              <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Expira</th>
+              <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap text-center">Físico</th>
+              <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Estatus Lote</th>
+              <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Expira Nueva</th>
             </tr>
           </thead>
           <tbody id="tbody-registro" class="text-body-sm divide-y divide-outline-variant">
-            <tr><td colspan="14" class="px-4 py-8 text-center text-on-surface-variant loading-pulse">Cargando datos...</td></tr>
+            <tr><td colspan="15" class="px-4 py-8 text-center text-on-surface-variant loading-pulse">Cargando datos...</td></tr>
           </tbody>
         </table>
       </div>
@@ -311,38 +342,44 @@
       <a class="hover:text-primary transition-colors" href="#">Manual de Usuario</a>
       <a class="hover:text-primary transition-colors" href="#">Soporte IT</a>
     </div>
-    <div class="text-body-sm text-outline font-medium">
-      © 2023 Hub Logístico Regional A. Todos los derechos reservados.
-    </div>
+    <div class="text-body-sm text-outline font-medium">© 2023 Hub Logístico Regional A. Todos los derechos reservados.</div>
   </div>
 </footer>
 
 <script>
-// ─── CONFIG ───────────────────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════
+// CONFIG
+// ════════════════════════════════════════════════════════
 const URL_SALDO   = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT_UbCckkG33bA6wo_xsHaqKq0pEWSUuqs7Vhlpq6gecV1tSVfxNWhqYcw-Y_h-qpQQ3MPwVbQ46deh/pub?gid=0&single=true&output=csv';
 const URL_DETALLE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT_UbCckkG33bA6wo_xsHaqKq0pEWSUuqs7Vhlpq6gecV1tSVfxNWhqYcw-Y_h-qpQQ3MPwVbQ46deh/pub?gid=664139875&single=true&output=csv';
+const CLAVE_DESCARGA = '9891';
 
-// ─── STATE ────────────────────────────────────────────────────────────────────
-let dataSaldo   = [];   // Sheet 1: saldo inventario
-let dataMudanza = [];   // Sheet 2: detalle mudanza
-let detalleCalc = [];   // calculado por código
+// ════════════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════════════
+let dataSaldo   = [];
+let dataMudanza = [];
+let detalleCalc = [];
+let filasRegistroActuales = [];   // filas visibles actualmente en tabla registro
+let pendingExportFn = null;       // función de descarga a ejecutar tras validar clave
 
-// ─── CSV PARSER ───────────────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════
+// CSV PARSER
+// ════════════════════════════════════════════════════════
 function parseCSV(text) {
   const lines = text.trim().split('\n');
   if (lines.length < 2) return [];
   const headers = splitCSVLine(lines[0]);
   return lines.slice(1).map(line => {
     const vals = splitCSVLine(line);
-    const obj = {};
+    const obj  = {};
     headers.forEach((h, i) => { obj[h.trim()] = (vals[i] || '').trim(); });
     return obj;
   }).filter(r => Object.values(r).some(v => v !== ''));
 }
 
 function splitCSVLine(line) {
-  const result = [];
-  let cur = '', inQ = false;
+  const result = []; let cur = '', inQ = false;
   for (let i = 0; i < line.length; i++) {
     const c = line[i];
     if (c === '"') { inQ = !inQ; }
@@ -353,52 +390,56 @@ function splitCSVLine(line) {
   return result;
 }
 
-// ─── FETCH ────────────────────────────────────────────────────────────────────
 async function fetchSheet(url) {
   const res = await fetch(url + '&t=' + Date.now());
   if (!res.ok) throw new Error('Error al cargar: ' + url);
   return parseCSV(await res.text());
 }
 
-// ─── CALCULAR DETALLE POR CÓDIGO ─────────────────────────────────────────────
+// ════════════════════════════════════════════════════════
+// CALCULAR DETALLE POR CÓDIGO
+// ════════════════════════════════════════════════════════
 function calcularDetalle() {
-  // Agrupar saldo por CODIGO → sumar TOTAL
+  // sumar TOTAL por CODIGO en sheet1
   const mapTotal = {};
   dataSaldo.forEach(r => {
-    const cod  = r['CODIGO'] || '';
-    const tot  = parseFloat(r['TOTAL']) || 0;
+    const cod = r['CODIGO'] || '';
     if (!cod) return;
-    mapTotal[cod] = (mapTotal[cod] || 0) + tot;
+    mapTotal[cod] = (mapTotal[cod] || 0) + (parseFloat(r['TOTAL']) || 0);
   });
 
-  // Agrupar mudanza por CODIGO → sumar FISICO
+  // sumar FISICO por CODIGO en sheet2
   const mapFisico = {};
   dataMudanza.forEach(r => {
-    const cod  = r['CODIGO'] || '';
-    const fis  = parseFloat(r['FISICO']) || 0;
+    const cod = r['CODIGO'] || '';
     if (!cod) return;
-    mapFisico[cod] = (mapFisico[cod] || 0) + fis;
+    mapFisico[cod] = (mapFisico[cod] || 0) + (parseFloat(r['FISICO']) || 0);
   });
 
-  // Construir arreglo único de códigos (de sheet 1)
-  const codigos = [...new Set(dataSaldo.map(r => r['CODIGO']).filter(Boolean))];
+  // códigos únicos de sheet1 (preserva orden de aparición)
+  const seen = new Set();
+  const codigos = [];
+  dataSaldo.forEach(r => {
+    const c = r['CODIGO'];
+    if (c && !seen.has(c)) { seen.add(c); codigos.push(c); }
+  });
 
   detalleCalc = codigos.map(cod => {
-    const total  = mapTotal[cod] || 0;
+    const total  = mapTotal[cod]  || 0;
     const fisico = mapFisico[cod] || 0;
     const pend   = total - fisico;
-
     let obs;
-    if (pend < 0)          obs = 'SOBRANTE';
-    else if (pend === 0)   obs = 'CONFORME';
+    if (pend < 0)            obs = 'SOBRANTE';
+    else if (pend === 0)     obs = 'CONFORME';
     else if (pend === total) obs = 'PENDIENTE';
-    else                   obs = 'EN PROCESO';
-
+    else                     obs = 'EN PROCESO';
     return { cod, total, pend, obs };
   });
 }
 
-// ─── BADGE HELPERS ────────────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════
+// BADGES
+// ════════════════════════════════════════════════════════
 function badgeObs(obs) {
   const map = {
     'CONFORME':   'bg-green-100 text-green-700',
@@ -406,30 +447,26 @@ function badgeObs(obs) {
     'PENDIENTE':  'bg-red-100 text-red-700',
     'SOBRANTE':   'bg-purple-100 text-purple-700',
   };
-  return `<span class="px-2 py-0.5 rounded text-[10px] font-bold ${map[obs] || 'bg-gray-100 text-gray-700'}">${obs}</span>`;
+  return `<span class="px-2 py-0.5 rounded text-[10px] font-bold ${map[obs]||'bg-gray-100 text-gray-700'}">${obs}</span>`;
 }
 
 function badgeEstatus(est) {
-  const map = {
-    'LIBERADO':  'bg-green-100 text-green-800',
-    'OBSERVADO': 'bg-orange-100 text-orange-800',
-    'RECHAZADO': 'bg-red-100 text-red-700',
-    'BLOQUEADO': 'bg-gray-200 text-gray-700',
-  };
-  const key = (est || '').toUpperCase();
-  return `<span class="px-2 py-1 rounded text-[10px] font-bold ${map[key] || 'bg-gray-100 text-gray-700'}">${est || ''}</span>`;
+  const k = (est||'').toUpperCase();
+  const map = { 'LIBERADO':'bg-green-100 text-green-800','OBSERVADO':'bg-orange-100 text-orange-800','RECHAZADO':'bg-red-100 text-red-700','BLOQUEADO':'bg-gray-200 text-gray-700' };
+  return `<span class="px-2 py-1 rounded text-[10px] font-bold ${map[k]||'bg-gray-100 text-gray-700'}">${est||''}</span>`;
 }
 
-// ─── RENDER DETALLE CÓDIGO ────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════
+// RENDER DETALLE CÓDIGO
+// ════════════════════════════════════════════════════════
 function renderDetalle() {
-  const busq   = (document.getElementById('filtro-codigo').value || '').toUpperCase();
+  const busq   = (document.getElementById('filtro-codigo').value||'').toUpperCase();
   const estado = document.getElementById('filtro-estado').value;
 
-  let filas = detalleCalc.filter(r => {
-    if (busq   && !r.cod.toUpperCase().includes(busq)) return false;
-    if (estado && r.obs !== estado) return false;
-    return true;
-  });
+  const filas = detalleCalc.filter(r =>
+    (!busq   || r.cod.toUpperCase().includes(busq)) &&
+    (!estado || r.obs === estado)
+  );
 
   const tbody = document.getElementById('tbody-detalle');
   if (!filas.length) {
@@ -439,80 +476,114 @@ function renderDetalle() {
 
   tbody.innerHTML = filas.map((r, i) => {
     const pendColor = r.pend < 0 ? 'text-purple-600' : r.pend === 0 ? 'text-on-surface' : 'text-error';
-    const rowCls = r.obs === 'PENDIENTE' ? 'bg-orange-50/50' : 'zebra-row hover:bg-surface-container-low transition-colors';
+    const rowCls = r.obs === 'PENDIENTE'
+      ? 'bg-orange-50/50'
+      : (i % 2 === 0 ? '' : 'bg-[#f8faff]') + ' hover:bg-[#eff4ff] transition-colors';
     return `<tr class="${rowCls}">
-      <td class="px-4 py-3 font-label-mono text-[11px] text-primary font-bold">${r.cod}</td>
-      <td class="px-4 py-3 font-semibold text-on-surface">${r.total.toLocaleString()}</td>
-      <td class="px-4 py-3 font-semibold ${pendColor}">${r.pend.toLocaleString()}</td>
-      <td class="px-4 py-3">${badgeObs(r.obs)}</td>
+      <td class="px-3 py-3 cod-cell">${r.cod}</td>
+      <td class="px-3 py-3 font-semibold text-on-surface text-[13px]">${r.total.toLocaleString()}</td>
+      <td class="px-3 py-3 font-semibold ${pendColor} text-[13px]">${r.pend.toLocaleString()}</td>
+      <td class="px-3 py-3">${badgeObs(r.obs)}</td>
     </tr>`;
   }).join('');
 }
 
-// ─── RENDER REGISTRO ──────────────────────────────────────────────────────────
-function renderRegistro() {
-  const lpnF    = (document.getElementById('filtro-lpn').value || '').toUpperCase();
-  const codF    = (document.getElementById('filtro-codigo-reg').value || '').toUpperCase();
+// ════════════════════════════════════════════════════════
+// RENDER REGISTRO
+// ════════════════════════════════════════════════════════
+function getFilasRegistroFiltradas() {
+  const lpnF    = (document.getElementById('filtro-lpn').value||'').toUpperCase();
+  const codF    = (document.getElementById('filtro-codigo-reg').value||'').toUpperCase();
   const fechaIni = document.getElementById('filtro-fecha-ini').value;
   const fechaFin = document.getElementById('filtro-fecha-fin').value;
 
-  let filas = dataMudanza.filter(r => {
-    if (lpnF && !(r['LPN'] || '').toUpperCase().includes(lpnF)) return false;
-    if (codF && !(r['CODIGO'] || '').toUpperCase().includes(codF)) return false;
+  return dataMudanza.filter(r => {
+    if (lpnF && !(r['LPN']||'').toUpperCase().includes(lpnF)) return false;
+    if (codF && !(r['CODIGO']||'').toUpperCase().includes(codF)) return false;
     if (fechaIni || fechaFin) {
-      // REGISTRO tiene formato DD/MM/YYYY HH:MM:SS
-      const partes = (r['REGISTRO'] || '').split(' ')[0].split('/');
+      const partes = (r['REGISTRO']||'').split(' ')[0].split('/');
       if (partes.length === 3) {
-        const fechaISO = `${partes[2]}-${partes[1]}-${partes[0]}`;
-        if (fechaIni && fechaISO < fechaIni) return false;
-        if (fechaFin && fechaISO > fechaFin) return false;
+        const iso = `${partes[2]}-${partes[1]}-${partes[0]}`;
+        if (fechaIni && iso < fechaIni) return false;
+        if (fechaFin && iso > fechaFin) return false;
       }
     }
     return true;
   });
+}
+
+function renderRegistro() {
+  filasRegistroActuales = getFilasRegistroFiltradas();
 
   const tbody = document.getElementById('tbody-registro');
-  if (!filas.length) {
-    tbody.innerHTML = '<tr><td colspan="14" class="px-4 py-8 text-center text-on-surface-variant">Sin resultados</td></tr>';
+  document.getElementById('chk-all').checked = false;
+  actualizarLblSeleccion();
+
+  if (!filasRegistroActuales.length) {
+    tbody.innerHTML = '<tr><td colspan="15" class="px-4 py-8 text-center text-on-surface-variant">Sin resultados</td></tr>';
     return;
   }
 
-  tbody.innerHTML = filas.map((r, i) => {
-    const cls = i % 2 === 0 ? 'zebra-row hover:bg-surface-container-low transition-colors' : 'hover:bg-surface-container-low transition-colors';
-    return `<tr class="${cls}">
-      <td class="px-4 py-4 font-label-mono text-[11px] text-on-surface-variant whitespace-nowrap">${r['REGISTRO'] || ''}</td>
-      <td class="px-4 py-4 font-medium whitespace-nowrap">${r['USUARIO'] || ''}</td>
-      <td class="px-4 py-4 font-label-mono text-primary font-bold whitespace-nowrap">${r['LPN'] || ''}</td>
-      <td class="px-4 py-4 font-label-mono whitespace-nowrap">${r['CODIGO'] || ''}</td>
-      <td class="px-4 py-4 truncate max-w-[200px]" title="${r['DESCRIPCCION'] || ''}">${r['DESCRIPCCION'] || ''}</td>
-      <td class="px-4 py-4 font-label-mono text-on-surface-variant whitespace-nowrap">${r['EAN13'] || ''}</td>
-      <td class="px-4 py-4 font-label-mono text-on-surface-variant whitespace-nowrap">${r['EAN14'] || ''}</td>
-      <td class="px-4 py-4 text-center font-semibold">${r['FxE'] || ''}</td>
-      <td class="px-4 py-4 text-on-surface-variant whitespace-nowrap">${r['FAMILIA'] || ''}</td>
-      <td class="px-4 py-4 font-label-mono whitespace-nowrap">${r['LOTE'] || ''}</td>
-      <td class="px-4 py-4 whitespace-nowrap">${r['EXPIRA'] || ''}</td>
-      <td class="px-4 py-4 text-center font-bold text-on-surface">${r['FISICO'] || ''}</td>
-      <td class="px-4 py-4 whitespace-nowrap">${badgeEstatus(r['ESTATUS LOTE'] || r['ESTATUS_LOTE'] || '')}</td>
-      <td class="px-4 py-4 whitespace-nowrap">${r['EXPIRA NUEVA'] || r['EXPIRA_NUEVA'] || ''}</td>
+  tbody.innerHTML = filasRegistroActuales.map((r, i) => {
+    const cls = i % 2 === 0 ? '' : 'bg-[#f8faff]';
+    const desc = (r['DESCRIPCCION']||'');
+    const est  = r['ESTATUS LOTE'] || r['ESTATUS_LOTE'] || '';
+    const expN = r['EXPIRA NUEVA'] || r['EXPIRA_NUEVA'] || '';
+    return `<tr class="${cls} hover:bg-[#eff4ff] transition-colors" data-idx="${i}">
+      <td class="px-3 py-3 text-center">
+        <input type="checkbox" class="chk-row chk-fila" data-idx="${i}">
+      </td>
+      <td class="px-3 py-3 font-label-mono text-[11px] text-on-surface-variant whitespace-nowrap">${r['REGISTRO']||''}</td>
+      <td class="px-3 py-3 font-medium whitespace-nowrap">${r['USUARIO']||''}</td>
+      <td class="px-3 py-3 font-label-mono text-primary font-bold whitespace-nowrap">${r['LPN']||''}</td>
+      <td class="px-3 py-3 font-label-mono whitespace-nowrap">${r['CODIGO']||''}</td>
+      <td class="px-3 py-3 whitespace-nowrap max-w-[220px] overflow-hidden text-ellipsis" title="${desc}">${desc}</td>
+      <td class="px-3 py-3 font-label-mono text-on-surface-variant whitespace-nowrap">${r['EAN13']||''}</td>
+      <td class="px-3 py-3 font-label-mono text-on-surface-variant whitespace-nowrap">${r['EAN14']||''}</td>
+      <td class="px-3 py-3 text-center font-semibold">${r['FxE']||''}</td>
+      <td class="px-3 py-3 text-on-surface-variant whitespace-nowrap">${r['FAMILIA']||''}</td>
+      <td class="px-3 py-3 font-label-mono whitespace-nowrap">${r['LOTE']||''}</td>
+      <td class="px-3 py-3 whitespace-nowrap">${r['EXPIRA']||''}</td>
+      <td class="px-3 py-3 text-center font-bold text-on-surface">${r['FISICO']||''}</td>
+      <td class="px-3 py-3 whitespace-nowrap">${badgeEstatus(est)}</td>
+      <td class="px-3 py-3 whitespace-nowrap">${expN}</td>
     </tr>`;
   }).join('');
+
+  // eventos checkboxes
+  document.querySelectorAll('.chk-fila').forEach(chk => {
+    chk.addEventListener('change', actualizarLblSeleccion);
+  });
 }
 
-// ─── KPIs ─────────────────────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════
+// CHECKBOX SELECCIÓN
+// ════════════════════════════════════════════════════════
+function actualizarLblSeleccion() {
+  const sel = document.querySelectorAll('.chk-fila:checked').length;
+  const lbl = document.getElementById('lbl-seleccion');
+  if (sel > 0) { lbl.textContent = `${sel} sel.`; lbl.classList.remove('hidden'); }
+  else         { lbl.classList.add('hidden'); }
+}
+
+document.getElementById('chk-all').addEventListener('change', function() {
+  document.querySelectorAll('.chk-fila').forEach(c => { c.checked = this.checked; });
+  actualizarLblSeleccion();
+});
+
+// ════════════════════════════════════════════════════════
+// KPIs
+// ════════════════════════════════════════════════════════
 function actualizarKPIs() {
-  // Cantidad inicial: suma de TOTAL sheet1
-  const totalSum = dataSaldo.reduce((s, r) => s + (parseFloat(r['TOTAL']) || 0), 0);
+  const totalSum  = dataSaldo.reduce((s,r) => s + (parseFloat(r['TOTAL'])||0), 0);
+  const fisicoSum = dataMudanza.reduce((s,r) => s + (parseFloat(r['FISICO'])||0), 0);
 
-  // Cantidad inventariada: suma de FISICO sheet2
-  const fisicoSum = dataMudanza.reduce((s, r) => s + (parseFloat(r['FISICO']) || 0), 0);
-
-  // Códigos únicos sheet1
+  // códigos únicos sheet1
   const codigos = new Set(dataSaldo.map(r => r['CODIGO']).filter(Boolean));
 
-  // LPNs únicos sheet2
-  const lpns = new Set(dataMudanza.map(r => r['LPN']).filter(Boolean));
+  // LPN únicos sheet2 — trim para evitar espacios fantasma
+  const lpns = new Set(dataMudanza.map(r => (r['LPN']||'').trim()).filter(Boolean));
 
-  // Porcentaje
   const pct = totalSum > 0 ? Math.round((fisicoSum / totalSum) * 100) : 0;
 
   document.getElementById('kpi-total').textContent        = totalSum.toLocaleString();
@@ -522,82 +593,125 @@ function actualizarKPIs() {
   document.getElementById('kpi-pct').textContent          = `${pct}% completado`;
   document.getElementById('donut-pct').textContent        = `${pct}%`;
 
-  // Animar donut (251.2 = circunferencia completa)
   const offset = 251.2 - (251.2 * pct / 100);
   document.getElementById('donut-arc').style.strokeDashoffset = offset;
 }
 
-// ─── EXPORT CSV ───────────────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════
+// EXPORT CSV (con clave)
+// ════════════════════════════════════════════════════════
 function exportCSV(data, filename) {
   if (!data.length) return;
   const headers = Object.keys(data[0]);
-  const rows    = data.map(r => headers.map(h => `"${(r[h] || '').replace(/"/g, '""')}"`).join(','));
+  const rows    = data.map(r => headers.map(h => `"${(r[h]||'').replace(/"/g,'""')}"`).join(','));
   const csv     = [headers.join(','), ...rows].join('\n');
-  const blob    = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+  const blob    = new Blob(['\ufeff'+csv], { type:'text/csv;charset=utf-8;' });
   const url     = URL.createObjectURL(blob);
   const a       = document.createElement('a');
   a.href = url; a.download = filename; a.click();
   URL.revokeObjectURL(url);
 }
 
-// ─── CARGA PRINCIPAL ──────────────────────────────────────────────────────────
+function pedirClaveYDescargar(fn) {
+  pendingExportFn = fn;
+  document.getElementById('input-clave').value = '';
+  document.getElementById('msg-clave').textContent = '';
+  document.getElementById('modal-clave').classList.add('open');
+  setTimeout(() => document.getElementById('input-clave').focus(), 100);
+}
+
+// ════════════════════════════════════════════════════════
+// MODAL CLAVE — eventos
+// ════════════════════════════════════════════════════════
+document.getElementById('btn-modal-cancel').addEventListener('click', () => {
+  document.getElementById('modal-clave').classList.remove('open');
+  pendingExportFn = null;
+});
+
+document.getElementById('btn-modal-ok').addEventListener('click', validarClave);
+
+document.getElementById('input-clave').addEventListener('keydown', e => {
+  if (e.key === 'Enter') validarClave();
+});
+
+function validarClave() {
+  const val = document.getElementById('input-clave').value;
+  if (val === CLAVE_DESCARGA) {
+    document.getElementById('modal-clave').classList.remove('open');
+    if (pendingExportFn) { pendingExportFn(); pendingExportFn = null; }
+  } else {
+    document.getElementById('msg-clave').textContent = 'Clave incorrecta. Intenta de nuevo.';
+    document.getElementById('input-clave').value = '';
+    document.getElementById('input-clave').focus();
+  }
+}
+
+// ════════════════════════════════════════════════════════
+// BOTONES DESCARGA
+// ════════════════════════════════════════════════════════
+document.getElementById('btn-export-detalle').addEventListener('click', () => {
+  pedirClaveYDescargar(() => {
+    const busq   = (document.getElementById('filtro-codigo').value||'').toUpperCase();
+    const estado = document.getElementById('filtro-estado').value;
+    const filas  = detalleCalc
+      .filter(r => (!busq||r.cod.toUpperCase().includes(busq)) && (!estado||r.obs===estado))
+      .map(r => ({ CODIGO:r.cod, TOTAL:r.total, PENDIENTE:r.pend, OBSERVACION:r.obs }));
+    exportCSV(filas, 'detalle_codigos.csv');
+  });
+});
+
+document.getElementById('btn-export-registro').addEventListener('click', () => {
+  pedirClaveYDescargar(() => {
+    // Si hay filas seleccionadas, descargar solo esas; si no, descargar las filtradas
+    const selIdx = [...document.querySelectorAll('.chk-fila:checked')].map(c => parseInt(c.dataset.idx));
+    const data   = selIdx.length > 0
+      ? selIdx.map(i => filasRegistroActuales[i])
+      : filasRegistroActuales;
+    exportCSV(data, 'registro_mudanza.csv');
+  });
+});
+
+// ════════════════════════════════════════════════════════
+// CARGA PRINCIPAL
+// ════════════════════════════════════════════════════════
 async function cargarDatos() {
   const iconSync = document.getElementById('icon-sync');
   iconSync.style.animation = 'spin 1s linear infinite';
-  iconSync.style.display   = 'inline-block';
 
   try {
     [dataSaldo, dataMudanza] = await Promise.all([
       fetchSheet(URL_SALDO),
       fetchSheet(URL_DETALLE)
     ]);
-
     calcularDetalle();
     actualizarKPIs();
     renderDetalle();
     renderRegistro();
-
   } catch (err) {
     console.error(err);
     document.getElementById('tbody-detalle').innerHTML =
-      `<tr><td colspan="4" class="px-4 py-6 text-center text-error text-body-sm">Error al cargar datos. Verifica que las hojas estén publicadas.</td></tr>`;
+      '<tr><td colspan="4" class="px-4 py-6 text-center text-error text-body-sm">Error al cargar datos.</td></tr>';
     document.getElementById('tbody-registro').innerHTML =
-      `<tr><td colspan="14" class="px-4 py-6 text-center text-error text-body-sm">Error al cargar datos. Verifica que las hojas estén publicadas.</td></tr>`;
+      '<tr><td colspan="15" class="px-4 py-6 text-center text-error text-body-sm">Error al cargar datos.</td></tr>';
   } finally {
     iconSync.style.animation = '';
   }
 }
 
-// ─── EVENTOS ──────────────────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════
+// EVENTOS FILTROS
+// ════════════════════════════════════════════════════════
 document.getElementById('btn-actualizar').addEventListener('click', cargarDatos);
-
 document.getElementById('filtro-codigo').addEventListener('input', renderDetalle);
 document.getElementById('filtro-estado').addEventListener('change', renderDetalle);
-
 document.getElementById('filtro-lpn').addEventListener('input', renderRegistro);
 document.getElementById('filtro-codigo-reg').addEventListener('input', renderRegistro);
 document.getElementById('filtro-fecha-ini').addEventListener('change', renderRegistro);
 document.getElementById('filtro-fecha-fin').addEventListener('change', renderRegistro);
 
-document.getElementById('btn-export-detalle').addEventListener('click', () => {
-  const busq   = (document.getElementById('filtro-codigo').value || '').toUpperCase();
-  const estado = document.getElementById('filtro-estado').value;
-  const filas  = detalleCalc
-    .filter(r => (!busq || r.cod.toUpperCase().includes(busq)) && (!estado || r.obs === estado))
-    .map(r => ({ CODIGO: r.cod, TOTAL: r.total, PENDIENTE: r.pend, OBSERVACION: r.obs }));
-  exportCSV(filas, 'detalle_codigos.csv');
-});
-
-document.getElementById('btn-export-registro').addEventListener('click', () => {
-  exportCSV(dataMudanza, 'registro_mudanza.csv');
-});
-
-// ─── SPIN CSS ─────────────────────────────────────────────────────────────────
-const styleEl = document.createElement('style');
-styleEl.textContent = `@keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }`;
-document.head.appendChild(styleEl);
-
-// ─── INIT ─────────────────────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════════
 cargarDatos();
 </script>
 </body>
