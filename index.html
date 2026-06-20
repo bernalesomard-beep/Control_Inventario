@@ -282,7 +282,7 @@
       <div class="p-4 border-b border-outline-variant flex flex-col gap-3 bg-white flex-shrink-0">
         <div class="flex items-center justify-between">
           <h2 class="font-headline-md text-[16px] text-on-surface font-bold">Detalle Código</h2>
-          <button id="btn-export-detalle" class="text-primary hover:bg-primary-fixed p-1.5 rounded-lg transition-colors" title="Descargar CSV">
+          <button id="btn-export-detalle" class="text-primary hover:bg-primary-fixed p-1.5 rounded-lg transition-colors" title="Descargar XLS">
             <span class="material-symbols-outlined text-[20px]">download</span>
           </button>
         </div>
@@ -301,6 +301,10 @@
             </select>
             <span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-outline text-[16px] pointer-events-none">expand_more</span>
           </div>
+          <button id="btn-limpiar-detalle" class="flex items-center justify-center gap-1.5 px-3 py-1.5 text-on-surface-variant hover:text-primary hover:bg-primary-fixed border border-outline-variant rounded-lg text-body-sm font-semibold transition-colors">
+            <span class="material-symbols-outlined text-[16px]">filter_alt_off</span>
+            Limpiar filtros
+          </button>
         </div>
       </div>
       <!-- tabla con scroll y cabecera fija -->
@@ -333,9 +337,13 @@
           <input id="filtro-fecha-fin" type="date" class="px-3 py-2 border border-outline-variant rounded-lg text-body-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none" style="min-width:130px;">
           <input id="filtro-lpn" class="px-3 py-2 border border-outline-variant rounded-lg text-body-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none" placeholder="LPN..." type="text" style="min-width:100px;">
           <input id="filtro-codigo-reg" class="px-3 py-2 border border-outline-variant rounded-lg text-body-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none" placeholder="Código..." type="text" style="min-width:110px;">
+          <button id="btn-limpiar-registro" class="flex items-center justify-center gap-1.5 px-3 py-2 text-on-surface-variant hover:text-primary hover:bg-primary-fixed border border-outline-variant rounded-lg text-body-sm font-semibold transition-colors" title="Limpiar filtros">
+            <span class="material-symbols-outlined text-[16px]">filter_alt_off</span>
+            Limpiar
+          </button>
           <!-- contador seleccionados -->
           <span id="lbl-seleccion" class="text-body-sm text-on-surface-variant font-medium hidden">0 sel.</span>
-          <button id="btn-export-registro" class="text-primary hover:bg-primary-fixed p-1.5 rounded-lg transition-colors" title="Exportar CSV (filtrado o seleccionado)">
+          <button id="btn-export-registro" class="text-primary hover:bg-primary-fixed p-1.5 rounded-lg transition-colors" title="Exportar XLS (filtrado o seleccionado)">
             <span class="material-symbols-outlined text-[20px]">download</span>
           </button>
         </div>
@@ -378,14 +386,12 @@
     <div class="flex items-center gap-3">
       <span class="font-display text-body-lg text-primary font-bold">Control de inventarios</span>
       <span class="w-px h-4 bg-outline-variant hidden md:block"></span>
-      <span class="text-on-surface-variant text-body-sm font-medium">v2.4.1 Industrial Edition</span>
+      <span class="text-on-surface-variant text-body-sm font-medium">V.14.09.89 Omar D. Bernales</span>
     </div>
     <div class="flex gap-8 text-body-sm text-on-surface-variant font-semibold">
       <a class="hover:text-primary transition-colors" href="#">Panel Administrativo</a>
-      <a class="hover:text-primary transition-colors" href="#">Manual de Usuario</a>
-      <a class="hover:text-primary transition-colors" href="#">Soporte IT</a>
     </div>
-    <div class="text-body-sm text-outline font-medium">© 2023 Hub Logístico Regional A. Todos los derechos reservados.</div>
+    <div class="text-body-sm text-outline font-medium">Puedes intentar seguir mi ritmo si quieres, pero recuerda que para alcanzarme necesitarás más que buena suerte y unas piernas nuevas.</div>
   </div>
 </footer>
 
@@ -678,16 +684,50 @@ document.addEventListener('click', (e) => {
 });
 
 // ════════════════════════════════════════════════════════
-// EXPORT CSV (con clave)
+// EXPORT XLS (con clave) — respeta cabeceras visibles en tabla
 // ════════════════════════════════════════════════════════
-function exportCSV(data, filename) {
-  if (!data.length) return;
-  const headers = Object.keys(data[0]);
-  const rows    = data.map(r => headers.map(h => `"${(r[h]||'').replace(/"/g,'""')}"`).join(','));
-  const csv     = [headers.join(','), ...rows].join('\n');
-  const blob    = new Blob(['\ufeff'+csv], { type:'text/csv;charset=utf-8;' });
-  const url     = URL.createObjectURL(blob);
-  const a       = document.createElement('a');
+function escapeHTML(str) {
+  return String(str ?? '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// headers: [{label:'Código', key:'cod'}, ...]
+function exportXLS(headers, rows, filename) {
+  if (!rows.length) return;
+
+  const theadHtml = headers.map(h => `<th style="background:#213145;color:#fff;font-weight:bold;padding:6px;">${escapeHTML(h.label)}</th>`).join('');
+  const rowsHtml  = rows.map(r =>
+    `<tr>${headers.map(h => `<td style="padding:5px;border:1px solid #ddd;">${escapeHTML(r[h.key])}</td>`).join('')}</tr>`
+  ).join('');
+
+  const html = `
+    <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+    <head>
+      <meta charset="utf-8">
+      <!--[if gte mso 9]>
+      <xml>
+        <x:ExcelWorkbook>
+          <x:ExcelWorksheets>
+            <x:ExcelWorksheet>
+              <x:Name>Datos</x:Name>
+              <x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions>
+            </x:ExcelWorksheet>
+          </x:ExcelWorksheets>
+        </x:ExcelWorkbook>
+      </xml>
+      <![endif]-->
+    </head>
+    <body>
+      <table border="1">
+        <thead><tr>${theadHtml}</tr></thead>
+        <tbody>${rowsHtml}</tbody>
+      </table>
+    </body>
+    </html>`;
+
+  const blob = new Blob(['\ufeff' + html], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
   a.href = url; a.download = filename; a.click();
   URL.revokeObjectURL(url);
 }
@@ -735,8 +775,14 @@ document.getElementById('btn-export-detalle').addEventListener('click', () => {
     const estado = document.getElementById('filtro-estado').value;
     const filas  = detalleCalc
       .filter(r => (!busq||r.cod.toUpperCase().includes(busq)) && (!estado||r.obs===estado))
-      .map(r => ({ CODIGO:r.cod, TOTAL:r.total, PENDIENTE:r.pend, OBSERVACION:r.obs }));
-    exportCSV(filas, 'detalle_codigos.csv');
+      .map(r => ({ codigo:r.cod, total:r.total, pend:r.pend, obs:r.obs }));
+    const headers = [
+      { label:'Código', key:'codigo' },
+      { label:'Total',  key:'total'  },
+      { label:'Pend.',  key:'pend'   },
+      { label:'Obs.',   key:'obs'    },
+    ];
+    exportXLS(headers, filas, 'detalle_codigos.xls');
   });
 });
 
@@ -744,10 +790,45 @@ document.getElementById('btn-export-registro').addEventListener('click', () => {
   pedirClaveYDescargar(() => {
     // Si hay filas seleccionadas, descargar solo esas; si no, descargar las filtradas
     const selIdx = [...document.querySelectorAll('.chk-fila:checked')].map(c => parseInt(c.dataset.idx));
-    const data   = selIdx.length > 0
+    const dataRaw = selIdx.length > 0
       ? selIdx.map(i => filasRegistroActuales[i])
       : filasRegistroActuales;
-    exportCSV(data, 'registro_mudanza.csv');
+
+    const data = dataRaw.map(r => ({
+      registro:    r['REGISTRO']||'',
+      usuario:     r['USUARIO']||'',
+      lpn:         r['LPN']||'',
+      codigo:      r['CODIGO']||'',
+      descripcion: r['DESCRIPCCION']||'',
+      ean13:       r['EAN13']||'',
+      ean14:       r['EAN14']||'',
+      fxe:         r['FxE']||'',
+      familia:     r['FAMILIA']||'',
+      lote:        r['LOTE']||'',
+      expira:      r['EXPIRA']||'',
+      fisico:      r['FISICO']||'',
+      estatus:     r['ESTATUS LOTE'] || r['ESTATUS_LOTE'] || '',
+      expiraNueva: r['EXPIRA NUEVA'] || r['EXPIRA_NUEVA'] || '',
+    }));
+
+    const headers = [
+      { label:'Registro',      key:'registro'    },
+      { label:'Usuario',       key:'usuario'     },
+      { label:'LPN',           key:'lpn'         },
+      { label:'Código',        key:'codigo'      },
+      { label:'Descripción',   key:'descripcion' },
+      { label:'EAN13',         key:'ean13'       },
+      { label:'EAN14',         key:'ean14'       },
+      { label:'FxE',           key:'fxe'         },
+      { label:'Familia',       key:'familia'     },
+      { label:'Lote',          key:'lote'        },
+      { label:'Expira',        key:'expira'      },
+      { label:'Físico',        key:'fisico'      },
+      { label:'Estatus Lote',  key:'estatus'     },
+      { label:'Expira Nueva',  key:'expiraNueva' },
+    ];
+
+    exportXLS(headers, data, 'registro_mudanza.xls');
   });
 });
 
@@ -789,6 +870,20 @@ document.getElementById('filtro-lpn').addEventListener('input', renderRegistro);
 document.getElementById('filtro-codigo-reg').addEventListener('input', renderRegistro);
 document.getElementById('filtro-fecha-ini').addEventListener('change', renderRegistro);
 document.getElementById('filtro-fecha-fin').addEventListener('change', renderRegistro);
+
+document.getElementById('btn-limpiar-detalle').addEventListener('click', () => {
+  document.getElementById('filtro-codigo').value = '';
+  document.getElementById('filtro-estado').value = '';
+  renderDetalle();
+});
+
+document.getElementById('btn-limpiar-registro').addEventListener('click', () => {
+  document.getElementById('filtro-fecha-ini').value = '';
+  document.getElementById('filtro-fecha-fin').value = '';
+  document.getElementById('filtro-lpn').value = '';
+  document.getElementById('filtro-codigo-reg').value = '';
+  renderRegistro();
+});
 
 // ════════════════════════════════════════════════════════
 // INIT
