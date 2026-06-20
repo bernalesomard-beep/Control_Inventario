@@ -582,7 +582,7 @@ function actualizarKPIs() {
   const codigos = new Set(dataSaldo.map(r => r['CODIGO']).filter(Boolean));
 
   // LPN únicos sheet2 — trim para evitar espacios fantasma
-  const lpns = new Set(dataMudanza.map(r => (r['LPN']||'').trim()).filter(Boolean));
+  const lpns = new Set(dataMudanza.map(r => (r['LPN']||'').trim().toUpperCase()).filter(Boolean));
 
   const pct = totalSum > 0 ? Math.round((fisicoSum / totalSum) * 100) : 0;
 
