@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Control de inventarios - Inventory Monitor Pro</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "secondary": "#9d4300",
+          "inverse-on-surface": "#eaf1ff",
+          "on-secondary-container": "#5c2400",
+          "surface-container-highest": "#d3e4fe",
+          "surface-variant": "#d3e4fe",
+          "surface": "#f8f9ff",
+          "outline-variant": "#c3c6d7",
+          "surface-bright": "#f8f9ff",
+          "on-primary-container": "#eeefff",
+          "on-background": "#0b1c30",
+          "error": "#ba1a1a",
+          "on-surface": "#0b1c30",
+          "inverse-surface": "#213145",
+          "on-primary": "#ffffff",
+          "outline": "#737686",
+          "surface-container-high": "#dce9ff",
+          "on-surface-variant": "#434655",
+          "on-error": "#ffffff",
+          "on-primary-fixed-variant": "#003ea8",
+          "inverse-primary": "#b4c5ff",
+          "tertiary-fixed": "#dae2fd",
+          "on-secondary-fixed-variant": "#783200",
+          "primary-container": "#2563eb",
+          "on-tertiary": "#ffffff",
+          "surface-container-lowest": "#ffffff",
+          "secondary-container": "#fd761a",
+          "primary-fixed": "#dbe1ff",
+          "background": "#f8f9ff",
+          "error-container": "#ffdad6",
+          "tertiary-container": "#656d84",
+          "surface-container-low": "#eff4ff",
+          "surface-container": "#e5eeff",
+          "surface-dim": "#cbdbf5",
+          "on-tertiary-container": "#eef0ff",
+          "primary-fixed-dim": "#b4c5ff",
+          "on-primary-fixed": "#00174b",
+          "tertiary": "#4d556b",
+          "surface-tint": "#0053db",
+          "on-tertiary-fixed-variant": "#3f465c",
+          "tertiary-fixed-dim": "#bec6e0",
+          "secondary-fixed-dim": "#ffb690",
+          "primary": "#004ac6",
+          "on-secondary-fixed": "#341100",
+          "secondary-fixed": "#ffdbca",
+          "on-error-container": "#93000a",
+          "on-secondary": "#ffffff"
+        },
+        borderRadius: {
+          DEFAULT: "0.125rem", lg: "0.25rem", xl: "0.5rem", full: "0.75rem"
+        },
+        spacing: {
+          gutter: "16px", unit: "4px", margin: "24px", "container-max": "1440px"
+        },
+        fontFamily: {
+          "body-md": ["Hanken Grotesk"], "headline-lg": ["Hanken Grotesk"],
+          "body-sm": ["Hanken Grotesk"], "label-mono": ["JetBrains Mono"],
+          "headline-md": ["Hanken Grotesk"], "body-lg": ["Hanken Grotesk"],
+          "display": ["Hanken Grotesk"]
+        },
+        fontSize: {
+          "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+          "headline-lg": ["28px", { lineHeight: "36px", fontWeight: "600" }],
+          "body-sm": ["12px", { lineHeight: "16px", fontWeight: "400" }],
+          "label-mono": ["12px", { lineHeight: "16px", letterSpacing: "0.02em", fontWeight: "500" }],
+          "headline-md": ["20px", { lineHeight: "28px", fontWeight: "600" }],
+          "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+          "display": ["36px", { lineHeight: "44px", fontWeight: "700" }]
+        }
+      }
+    }
+  }
+</script>
+<style>
+  body { font-family: 'Hanken Grotesk', sans-serif; background-color: #f8f9ff; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .zebra-row:nth-child(even) { background-color: #f8faff; }
+  .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+  .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+  .custom-scrollbar::-webkit-scrollbar-thumb { background: #c3c6d7; border-radius: 10px; }
+  .sticky-header th { position: sticky; top: 0; z-index: 20; }
+  .loading-pulse { animation: pulse 1.5s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+</style>
+</head>
+<body class="text-on-surface bg-background">
+
+<!-- TopNavBar -->
+<header class="bg-white border-b border-outline-variant sticky top-0 z-50">
+  <div class="flex justify-between items-center h-16 px-gutter w-full max-w-container-max mx-auto">
+    <div class="flex items-center gap-8">
+      <span class="font-display text-[24px] text-primary font-bold">Control de inventarios</span>
+      <nav class="hidden md:flex gap-6 items-center">
+        <a class="font-body-md text-body-md text-primary font-semibold border-b-2 border-primary pb-1 cursor-pointer" href="#">Dashboard</a>
+        <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors cursor-pointer" href="#">Reports</a>
+      </nav>
+    </div>
+    <div class="flex items-center gap-4">
+      <button id="btn-actualizar" class="flex items-center gap-2 px-3 py-1.5 text-primary hover:bg-primary/5 rounded-lg transition-all border border-primary/20">
+        <span class="material-symbols-outlined text-[20px]" id="icon-sync">sync</span>
+        <span class="font-body-md font-semibold">Actualizar</span>
+      </button>
+      <button class="material-symbols-outlined text-on-surface-variant p-2 hover:bg-surface-container rounded-full transition-all">notifications</button>
+      <button class="material-symbols-outlined text-on-surface-variant p-2 hover:bg-surface-container rounded-full transition-all">settings</button>
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-white overflow-hidden ring-2 ring-surface">
+          <img alt="Omar Bernales" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsigrJykngzvEhnb7oWWZxGw0_zNyVDfwmztXnvro9fObqIb8PE7mGO_YkP4gOe6ed2IU_OV3I6oIEOdn3LxBqwcI5_6ShDSwVyPqVkYjtrqKemYct8rY32eCrWYsLBxlJY9ikkl_8uGtrY-8YwrJVv7nBaujGwhvkwevPYCMy14Q13gdLiXa_cvs9LNZPnMWvEINTqDoajocsI6mDtSjsw7oxPmrmurS_1-VgrcLuGt2rbmZSGptKqFrta_bFunNfJ9JHorUi6ADU">
+        </div>
+        <div class="flex flex-col leading-tight">
+          <span class="font-body-md font-bold text-on-surface">Omar Bernales</span>
+          <span class="font-body-sm text-on-surface-variant">Odan89</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-container-max mx-auto px-gutter py-8 space-y-8">
+
+  <!-- SECTION: Resumen de Avance -->
+  <section class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+    <!-- Izquierda: KPIs 1 y 2 -->
+    <div class="lg:col-span-3 flex flex-col gap-4">
+      <div class="bg-white border border-outline-variant p-5 rounded-lg shadow-sm">
+        <p class="text-on-surface-variant font-body-sm text-body-sm uppercase tracking-wider font-semibold mb-1">Cantidad Inicial</p>
+        <h3 class="font-headline-lg text-headline-lg text-on-surface" id="kpi-total">—</h3>
+        <div class="flex items-center gap-1 mt-2 text-primary text-body-sm">
+          <span class="material-symbols-outlined text-[16px]">show_chart</span>
+          <span class="font-medium">Base de datos</span>
+        </div>
+      </div>
+      <div class="bg-white border border-outline-variant p-5 rounded-lg shadow-sm">
+        <p class="text-on-surface-variant font-body-sm text-body-sm uppercase tracking-wider font-semibold mb-1">Cantidad Inventariada</p>
+        <h3 class="font-headline-lg text-headline-lg text-on-surface" id="kpi-inventariada">—</h3>
+        <div class="flex items-center gap-1 mt-2 text-secondary text-body-sm font-bold">
+          <span class="material-symbols-outlined text-[16px]">trending_up</span>
+          <span id="kpi-pct">— completado</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Centro: Donut -->
+    <div class="lg:col-span-6 flex flex-col items-center justify-center p-8">
+      <div class="relative w-64 h-64">
+        <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+          <circle class="text-surface-container stroke-current" cx="50" cy="50" fill="transparent" r="40"
+            stroke-dasharray="251.2" stroke-dashoffset="0" stroke-linecap="round" stroke-width="8"></circle>
+          <circle id="donut-arc" class="text-primary stroke-current" cx="50" cy="50" fill="transparent" r="40"
+            stroke-dasharray="251.2" stroke-dashoffset="251.2" stroke-linecap="round" stroke-width="8"
+            style="transition: stroke-dashoffset 0.8s ease;"></circle>
+        </svg>
+        <div class="absolute inset-0 flex flex-col items-center justify-center">
+          <span class="font-display text-[48px] text-on-surface font-extrabold leading-tight" id="donut-pct">—%</span>
+          <span class="font-body-md text-on-surface-variant font-bold tracking-widest text-[10px] uppercase">Avance Total</span>
+        </div>
+      </div>
+      <div class="mt-6 flex gap-8 items-center">
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-primary"></span>
+          <span class="text-body-sm font-semibold text-on-surface-variant">Ejecutado</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-surface-container"></span>
+          <span class="text-body-sm font-semibold text-on-surface-variant">Pendiente</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Derecha: KPIs 3 y 4 -->
+    <div class="lg:col-span-3 flex flex-col gap-4">
+      <div class="bg-white border border-outline-variant p-5 rounded-lg shadow-sm">
+        <p class="text-on-surface-variant font-body-sm text-body-sm uppercase tracking-wider font-semibold mb-1">Cantidad de Códigos</p>
+        <h3 class="font-headline-lg text-headline-lg text-on-surface" id="kpi-codigos">—</h3>
+        <div class="flex items-center gap-1 mt-2 text-on-surface-variant text-body-sm">
+          <span class="material-symbols-outlined text-[16px]">qr_code</span>
+          <span class="font-medium">SKUs Activos</span>
+        </div>
+      </div>
+      <div class="bg-white border border-outline-variant p-5 rounded-lg shadow-sm">
+        <p class="text-on-surface-variant font-body-sm text-body-sm uppercase tracking-wider font-semibold mb-1">Cantidad de Paletas</p>
+        <h3 class="font-headline-lg text-headline-lg text-on-surface" id="kpi-paletas">—</h3>
+        <div class="flex items-center gap-1 mt-2 text-on-surface-variant text-body-sm">
+          <span class="material-symbols-outlined text-[16px]">inventory_2</span>
+          <span class="font-medium">Unidades de carga</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Two Column Layout -->
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+
+    <!-- SECTION: Detalle por Código (25%) -->
+    <section class="lg:col-span-1 bg-white border border-outline-variant rounded-lg overflow-hidden shadow-sm flex flex-col h-[600px]">
+      <div class="p-4 border-b border-outline-variant flex flex-col gap-3 bg-white">
+        <div class="flex items-center justify-between">
+          <h2 class="font-headline-md text-[16px] text-on-surface font-bold">Detalle Código</h2>
+          <button id="btn-export-detalle" class="text-primary hover:bg-primary-fixed p-1.5 rounded-lg transition-colors" title="Descargar CSV">
+            <span class="material-symbols-outlined text-[20px]">download</span>
+          </button>
+        </div>
+        <div class="grid grid-cols-1 gap-2">
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-outline text-[16px]">search</span>
+            <input id="filtro-codigo" class="pl-9 pr-3 py-1.5 border border-outline-variant rounded-lg text-body-sm w-full focus:ring-1 focus:ring-primary focus:border-primary outline-none" placeholder="Buscar código..." type="text">
+          </div>
+          <div class="relative">
+            <select id="filtro-estado" class="pl-3 pr-8 py-1.5 border border-outline-variant rounded-lg text-body-sm w-full focus:ring-1 focus:ring-primary focus:border-primary outline-none appearance-none bg-white">
+              <option value="">Todos los estados</option>
+              <option value="CONFORME">Conforme</option>
+              <option value="EN PROCESO">En Proceso</option>
+              <option value="PENDIENTE">Pendiente</option>
+              <option value="SOBRANTE">Sobrante</option>
+            </select>
+            <span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-outline text-[16px] pointer-events-none">expand_more</span>
+          </div>
+        </div>
+      </div>
+      <div class="overflow-y-auto custom-scrollbar flex-grow">
+        <table class="w-full text-left border-collapse">
+          <thead class="sticky-header">
+            <tr class="bg-inverse-surface">
+              <th class="px-4 py-3 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white">Código</th>
+              <th class="px-4 py-3 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white">Total</th>
+              <th class="px-4 py-3 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white">Pend.</th>
+              <th class="px-4 py-3 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white">Obs.</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-detalle" class="text-body-md divide-y divide-outline-variant">
+            <tr><td colspan="4" class="px-4 py-8 text-center text-on-surface-variant loading-pulse">Cargando datos...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTION: Registro (75%) -->
+    <section class="lg:col-span-3 bg-white border border-outline-variant rounded-lg overflow-hidden shadow-sm flex flex-col h-[600px]">
+      <div class="p-6 border-b border-outline-variant bg-white flex flex-col md:flex-row justify-between items-center gap-4">
+        <h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary">history</span>Registro
+        </h2>
+        <div class="flex flex-wrap gap-3 w-full md:w-auto">
+          <div class="relative flex-grow md:w-40">
+            <input id="filtro-fecha-ini" type="date" class="pl-3 pr-3 py-2 border border-outline-variant rounded-lg text-body-sm w-full focus:ring-1 focus:ring-primary focus:border-primary outline-none" placeholder="Fecha Inicio">
+          </div>
+          <div class="relative flex-grow md:w-40">
+            <input id="filtro-fecha-fin" type="date" class="pl-3 pr-3 py-2 border border-outline-variant rounded-lg text-body-sm w-full focus:ring-1 focus:ring-primary focus:border-primary outline-none" placeholder="Fecha Fin">
+          </div>
+          <div class="relative flex-grow md:w-40">
+            <input id="filtro-lpn" class="pl-3 pr-3 py-2 border border-outline-variant rounded-lg text-body-sm w-full focus:ring-1 focus:ring-primary focus:border-primary outline-none" placeholder="LPN..." type="text">
+          </div>
+          <div class="relative flex-grow md:w-40">
+            <input id="filtro-codigo-reg" class="pl-3 pr-3 py-2 border border-outline-variant rounded-lg text-body-sm w-full focus:ring-1 focus:ring-primary focus:border-primary outline-none" placeholder="Código..." type="text">
+          </div>
+          <button id="btn-export-registro" class="text-primary hover:bg-primary-fixed p-1.5 rounded-lg transition-colors" title="Exportar CSV">
+            <span class="material-symbols-outlined text-[20px]">download</span>
+          </button>
+        </div>
+      </div>
+      <div class="overflow-x-auto overflow-y-auto custom-scrollbar flex-grow">
+        <table class="w-full text-left border-collapse min-w-[1400px]">
+          <thead class="sticky-header">
+            <tr class="bg-inverse-surface">
+              <th class="px-4 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Registro</th>
+              <th class="px-4 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Usuario</th>
+              <th class="px-4 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">LPN</th>
+              <th class="px-4 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Código</th>
+              <th class="px-4 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Descripción</th>
+              <th class="px-4 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">EAN13</th>
+              <th class="px-4 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">EAN14</th>
+              <th class="px-4 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap text-center">FxE</th>
+              <th class="px-4 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Familia</th>
+              <th class="px-4 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Lote</th>
+              <th class="px-4 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Expira</th>
+              <th class="px-4 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap text-center">Físico</th>
+              <th class="px-4 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Estatus Lote</th>
+              <th class="px-4 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Expira Nueva</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-registro" class="text-body-sm divide-y divide-outline-variant">
+            <tr><td colspan="14" class="px-4 py-8 text-center text-on-surface-variant loading-pulse">Cargando datos...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="mt-12 bg-white border-t border-outline-variant py-8">
+  <div class="max-w-container-max mx-auto px-gutter flex flex-col md:flex-row justify-between items-center gap-6">
+    <div class="flex items-center gap-3">
+      <span class="font-display text-body-lg text-primary font-bold">Control de inventarios</span>
+      <span class="w-px h-4 bg-outline-variant hidden md:block"></span>
+      <span class="text-on-surface-variant text-body-sm font-medium">v2.4.1 Industrial Edition</span>
+    </div>
+    <div class="flex gap-8 text-body-sm text-on-surface-variant font-semibold">
+      <a class="hover:text-primary transition-colors" href="#">Panel Administrativo</a>
+      <a class="hover:text-primary transition-colors" href="#">Manual de Usuario</a>
+      <a class="hover:text-primary transition-colors" href="#">Soporte IT</a>
+    </div>
+    <div class="text-body-sm text-outline font-medium">
+      © 2023 Hub Logístico Regional A. Todos los derechos reservados.
+    </div>
+  </div>
+</footer>
+
+<script>
+// ─── CONFIG ───────────────────────────────────────────────────────────────────
+const URL_SALDO   = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT_UbCckkG33bA6wo_xsHaqKq0pEWSUuqs7Vhlpq6gecV1tSVfxNWhqYcw-Y_h-qpQQ3MPwVbQ46deh/pub?gid=0&single=true&output=csv';
+const URL_DETALLE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT_UbCckkG33bA6wo_xsHaqKq0pEWSUuqs7Vhlpq6gecV1tSVfxNWhqYcw-Y_h-qpQQ3MPwVbQ46deh/pub?gid=664139875&single=true&output=csv';
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+let dataSaldo   = [];   // Sheet 1: saldo inventario
+let dataMudanza = [];   // Sheet 2: detalle mudanza
+let detalleCalc = [];   // calculado por código
+
+// ─── CSV PARSER ───────────────────────────────────────────────────────────────
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  if (lines.length < 2) return [];
+  const headers = splitCSVLine(lines[0]);
+  return lines.slice(1).map(line => {
+    const vals = splitCSVLine(line);
+    const obj = {};
+    headers.forEach((h, i) => { obj[h.trim()] = (vals[i] || '').trim(); });
+    return obj;
+  }).filter(r => Object.values(r).some(v => v !== ''));
+}
+
+function splitCSVLine(line) {
+  const result = [];
+  let cur = '', inQ = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (c === '"') { inQ = !inQ; }
+    else if (c === ',' && !inQ) { result.push(cur); cur = ''; }
+    else { cur += c; }
+  }
+  result.push(cur);
+  return result;
+}
+
+// ─── FETCH ────────────────────────────────────────────────────────────────────
+async function fetchSheet(url) {
+  const res = await fetch(url + '&t=' + Date.now());
+  if (!res.ok) throw new Error('Error al cargar: ' + url);
+  return parseCSV(await res.text());
+}
+
+// ─── CALCULAR DETALLE POR CÓDIGO ─────────────────────────────────────────────
+function calcularDetalle() {
+  // Agrupar saldo por CODIGO → sumar TOTAL
+  const mapTotal = {};
+  dataSaldo.forEach(r => {
+    const cod  = r['CODIGO'] || '';
+    const tot  = parseFloat(r['TOTAL']) || 0;
+    if (!cod) return;
+    mapTotal[cod] = (mapTotal[cod] || 0) + tot;
+  });
+
+  // Agrupar mudanza por CODIGO → sumar FISICO
+  const mapFisico = {};
+  dataMudanza.forEach(r => {
+    const cod  = r['CODIGO'] || '';
+    const fis  = parseFloat(r['FISICO']) || 0;
+    if (!cod) return;
+    mapFisico[cod] = (mapFisico[cod] || 0) + fis;
+  });
+
+  // Construir arreglo único de códigos (de sheet 1)
+  const codigos = [...new Set(dataSaldo.map(r => r['CODIGO']).filter(Boolean))];
+
+  detalleCalc = codigos.map(cod => {
+    const total  = mapTotal[cod] || 0;
+    const fisico = mapFisico[cod] || 0;
+    const pend   = total - fisico;
+
+    let obs;
+    if (pend < 0)          obs = 'SOBRANTE';
+    else if (pend === 0)   obs = 'CONFORME';
+    else if (pend === total) obs = 'PENDIENTE';
+    else                   obs = 'EN PROCESO';
+
+    return { cod, total, pend, obs };
+  });
+}
+
+// ─── BADGE HELPERS ────────────────────────────────────────────────────────────
+function badgeObs(obs) {
+  const map = {
+    'CONFORME':   'bg-green-100 text-green-700',
+    'EN PROCESO': 'bg-blue-100 text-blue-700',
+    'PENDIENTE':  'bg-red-100 text-red-700',
+    'SOBRANTE':   'bg-purple-100 text-purple-700',
+  };
+  return `<span class="px-2 py-0.5 rounded text-[10px] font-bold ${map[obs] || 'bg-gray-100 text-gray-700'}">${obs}</span>`;
+}
+
+function badgeEstatus(est) {
+  const map = {
+    'LIBERADO':  'bg-green-100 text-green-800',
+    'OBSERVADO': 'bg-orange-100 text-orange-800',
+    'RECHAZADO': 'bg-red-100 text-red-700',
+    'BLOQUEADO': 'bg-gray-200 text-gray-700',
+  };
+  const key = (est || '').toUpperCase();
+  return `<span class="px-2 py-1 rounded text-[10px] font-bold ${map[key] || 'bg-gray-100 text-gray-700'}">${est || ''}</span>`;
+}
+
+// ─── RENDER DETALLE CÓDIGO ────────────────────────────────────────────────────
+function renderDetalle() {
+  const busq   = (document.getElementById('filtro-codigo').value || '').toUpperCase();
+  const estado = document.getElementById('filtro-estado').value;
+
+  let filas = detalleCalc.filter(r => {
+    if (busq   && !r.cod.toUpperCase().includes(busq)) return false;
+    if (estado && r.obs !== estado) return false;
+    return true;
+  });
+
+  const tbody = document.getElementById('tbody-detalle');
+  if (!filas.length) {
+    tbody.innerHTML = '<tr><td colspan="4" class="px-4 py-8 text-center text-on-surface-variant">Sin resultados</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = filas.map((r, i) => {
+    const pendColor = r.pend < 0 ? 'text-purple-600' : r.pend === 0 ? 'text-on-surface' : 'text-error';
+    const rowCls = r.obs === 'PENDIENTE' ? 'bg-orange-50/50' : 'zebra-row hover:bg-surface-container-low transition-colors';
+    return `<tr class="${rowCls}">
+      <td class="px-4 py-3 font-label-mono text-[11px] text-primary font-bold">${r.cod}</td>
+      <td class="px-4 py-3 font-semibold text-on-surface">${r.total.toLocaleString()}</td>
+      <td class="px-4 py-3 font-semibold ${pendColor}">${r.pend.toLocaleString()}</td>
+      <td class="px-4 py-3">${badgeObs(r.obs)}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ─── RENDER REGISTRO ──────────────────────────────────────────────────────────
+function renderRegistro() {
+  const lpnF    = (document.getElementById('filtro-lpn').value || '').toUpperCase();
+  const codF    = (document.getElementById('filtro-codigo-reg').value || '').toUpperCase();
+  const fechaIni = document.getElementById('filtro-fecha-ini').value;
+  const fechaFin = document.getElementById('filtro-fecha-fin').value;
+
+  let filas = dataMudanza.filter(r => {
+    if (lpnF && !(r['LPN'] || '').toUpperCase().includes(lpnF)) return false;
+    if (codF && !(r['CODIGO'] || '').toUpperCase().includes(codF)) return false;
+    if (fechaIni || fechaFin) {
+      // REGISTRO tiene formato DD/MM/YYYY HH:MM:SS
+      const partes = (r['REGISTRO'] || '').split(' ')[0].split('/');
+      if (partes.length === 3) {
+        const fechaISO = `${partes[2]}-${partes[1]}-${partes[0]}`;
+        if (fechaIni && fechaISO < fechaIni) return false;
+        if (fechaFin && fechaISO > fechaFin) return false;
+      }
+    }
+    return true;
+  });
+
+  const tbody = document.getElementById('tbody-registro');
+  if (!filas.length) {
+    tbody.innerHTML = '<tr><td colspan="14" class="px-4 py-8 text-center text-on-surface-variant">Sin resultados</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = filas.map((r, i) => {
+    const cls = i % 2 === 0 ? 'zebra-row hover:bg-surface-container-low transition-colors' : 'hover:bg-surface-container-low transition-colors';
+    return `<tr class="${cls}">
+      <td class="px-4 py-4 font-label-mono text-[11px] text-on-surface-variant whitespace-nowrap">${r['REGISTRO'] || ''}</td>
+      <td class="px-4 py-4 font-medium whitespace-nowrap">${r['USUARIO'] || ''}</td>
+      <td class="px-4 py-4 font-label-mono text-primary font-bold whitespace-nowrap">${r['LPN'] || ''}</td>
+      <td class="px-4 py-4 font-label-mono whitespace-nowrap">${r['CODIGO'] || ''}</td>
+      <td class="px-4 py-4 truncate max-w-[200px]" title="${r['DESCRIPCCION'] || ''}">${r['DESCRIPCCION'] || ''}</td>
+      <td class="px-4 py-4 font-label-mono text-on-surface-variant whitespace-nowrap">${r['EAN13'] || ''}</td>
+      <td class="px-4 py-4 font-label-mono text-on-surface-variant whitespace-nowrap">${r['EAN14'] || ''}</td>
+      <td class="px-4 py-4 text-center font-semibold">${r['FxE'] || ''}</td>
+      <td class="px-4 py-4 text-on-surface-variant whitespace-nowrap">${r['FAMILIA'] || ''}</td>
+      <td class="px-4 py-4 font-label-mono whitespace-nowrap">${r['LOTE'] || ''}</td>
+      <td class="px-4 py-4 whitespace-nowrap">${r['EXPIRA'] || ''}</td>
+      <td class="px-4 py-4 text-center font-bold text-on-surface">${r['FISICO'] || ''}</td>
+      <td class="px-4 py-4 whitespace-nowrap">${badgeEstatus(r['ESTATUS LOTE'] || r['ESTATUS_LOTE'] || '')}</td>
+      <td class="px-4 py-4 whitespace-nowrap">${r['EXPIRA NUEVA'] || r['EXPIRA_NUEVA'] || ''}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ─── KPIs ─────────────────────────────────────────────────────────────────────
+function actualizarKPIs() {
+  // Cantidad inicial: suma de TOTAL sheet1
+  const totalSum = dataSaldo.reduce((s, r) => s + (parseFloat(r['TOTAL']) || 0), 0);
+
+  // Cantidad inventariada: suma de FISICO sheet2
+  const fisicoSum = dataMudanza.reduce((s, r) => s + (parseFloat(r['FISICO']) || 0), 0);
+
+  // Códigos únicos sheet1
+  const codigos = new Set(dataSaldo.map(r => r['CODIGO']).filter(Boolean));
+
+  // LPNs únicos sheet2
+  const lpns = new Set(dataMudanza.map(r => r['LPN']).filter(Boolean));
+
+  // Porcentaje
+  const pct = totalSum > 0 ? Math.round((fisicoSum / totalSum) * 100) : 0;
+
+  document.getElementById('kpi-total').textContent        = totalSum.toLocaleString();
+  document.getElementById('kpi-inventariada').textContent = fisicoSum.toLocaleString();
+  document.getElementById('kpi-codigos').textContent      = codigos.size.toLocaleString();
+  document.getElementById('kpi-paletas').textContent      = lpns.size.toLocaleString();
+  document.getElementById('kpi-pct').textContent          = `${pct}% completado`;
+  document.getElementById('donut-pct').textContent        = `${pct}%`;
+
+  // Animar donut (251.2 = circunferencia completa)
+  const offset = 251.2 - (251.2 * pct / 100);
+  document.getElementById('donut-arc').style.strokeDashoffset = offset;
+}
+
+// ─── EXPORT CSV ───────────────────────────────────────────────────────────────
+function exportCSV(data, filename) {
+  if (!data.length) return;
+  const headers = Object.keys(data[0]);
+  const rows    = data.map(r => headers.map(h => `"${(r[h] || '').replace(/"/g, '""')}"`).join(','));
+  const csv     = [headers.join(','), ...rows].join('\n');
+  const blob    = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url     = URL.createObjectURL(blob);
+  const a       = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ─── CARGA PRINCIPAL ──────────────────────────────────────────────────────────
+async function cargarDatos() {
+  const iconSync = document.getElementById('icon-sync');
+  iconSync.style.animation = 'spin 1s linear infinite';
+  iconSync.style.display   = 'inline-block';
+
+  try {
+    [dataSaldo, dataMudanza] = await Promise.all([
+      fetchSheet(URL_SALDO),
+      fetchSheet(URL_DETALLE)
+    ]);
+
+    calcularDetalle();
+    actualizarKPIs();
+    renderDetalle();
+    renderRegistro();
+
+  } catch (err) {
+    console.error(err);
+    document.getElementById('tbody-detalle').innerHTML =
+      `<tr><td colspan="4" class="px-4 py-6 text-center text-error text-body-sm">Error al cargar datos. Verifica que las hojas estén publicadas.</td></tr>`;
+    document.getElementById('tbody-registro').innerHTML =
+      `<tr><td colspan="14" class="px-4 py-6 text-center text-error text-body-sm">Error al cargar datos. Verifica que las hojas estén publicadas.</td></tr>`;
+  } finally {
+    iconSync.style.animation = '';
+  }
+}
+
+// ─── EVENTOS ──────────────────────────────────────────────────────────────────
+document.getElementById('btn-actualizar').addEventListener('click', cargarDatos);
+
+document.getElementById('filtro-codigo').addEventListener('input', renderDetalle);
+document.getElementById('filtro-estado').addEventListener('change', renderDetalle);
+
+document.getElementById('filtro-lpn').addEventListener('input', renderRegistro);
+document.getElementById('filtro-codigo-reg').addEventListener('input', renderRegistro);
+document.getElementById('filtro-fecha-ini').addEventListener('change', renderRegistro);
+document.getElementById('filtro-fecha-fin').addEventListener('change', renderRegistro);
+
+document.getElementById('btn-export-detalle').addEventListener('click', () => {
+  const busq   = (document.getElementById('filtro-codigo').value || '').toUpperCase();
+  const estado = document.getElementById('filtro-estado').value;
+  const filas  = detalleCalc
+    .filter(r => (!busq || r.cod.toUpperCase().includes(busq)) && (!estado || r.obs === estado))
+    .map(r => ({ CODIGO: r.cod, TOTAL: r.total, PENDIENTE: r.pend, OBSERVACION: r.obs }));
+  exportCSV(filas, 'detalle_codigos.csv');
+});
+
+document.getElementById('btn-export-registro').addEventListener('click', () => {
+  exportCSV(dataMudanza, 'registro_mudanza.csv');
+});
+
+// ─── SPIN CSS ─────────────────────────────────────────────────────────────────
+const styleEl = document.createElement('style');
+styleEl.textContent = `@keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }`;
+document.head.appendChild(styleEl);
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+cargarDatos();
+</script>
+</body>
+</html>
