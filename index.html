@@ -146,7 +146,40 @@
         <span class="material-symbols-outlined text-[20px]" id="icon-sync">sync</span>
         <span class="font-body-md font-semibold">Actualizar</span>
       </button>
-      <button class="material-symbols-outlined text-on-surface-variant p-2 hover:bg-surface-container rounded-full transition-all">notifications</button>
+      <div class="relative">
+        <button id="btn-notif" class="material-symbols-outlined text-on-surface-variant p-2 hover:bg-surface-container rounded-full transition-all relative">
+          notifications
+          <span id="notif-badge" class="hidden absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+        </button>
+        <div id="panel-notif" class="hidden absolute right-0 top-full mt-2 w-80 bg-white border border-outline-variant rounded-lg shadow-lg z-50 overflow-hidden">
+          <div class="px-4 py-3 border-b border-outline-variant bg-inverse-surface">
+            <span class="text-white font-bold text-body-sm">Resumen de estados por código</span>
+          </div>
+          <div class="max-h-80 overflow-auto custom-scrollbar divide-y divide-outline-variant">
+            <div class="flex items-center justify-between px-4 py-3">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span>
+                <span class="text-body-md font-semibold text-on-surface">Sobrante</span>
+              </div>
+              <span id="notif-sobrante" class="font-body-md font-bold text-on-surface">—</span>
+            </div>
+            <div class="flex items-center justify-between px-4 py-3">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+                <span class="text-body-md font-semibold text-on-surface">En Proceso</span>
+              </div>
+              <span id="notif-proceso" class="font-body-md font-bold text-on-surface">—</span>
+            </div>
+            <div class="flex items-center justify-between px-4 py-3">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+                <span class="text-body-md font-semibold text-on-surface">Pendiente</span>
+              </div>
+              <span id="notif-pendiente" class="font-body-md font-bold text-on-surface">—</span>
+            </div>
+          </div>
+        </div>
+      </div>
       <button class="material-symbols-outlined text-on-surface-variant p-2 hover:bg-surface-container rounded-full transition-all">settings</button>
       <div class="flex items-center gap-3">
         <div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-white overflow-hidden ring-2 ring-surface">
@@ -213,10 +246,20 @@
     <div class="lg:col-span-3 flex flex-col gap-4">
       <div class="bg-white border border-outline-variant p-5 rounded-lg shadow-sm">
         <p class="text-on-surface-variant font-body-sm text-body-sm uppercase tracking-wider font-semibold mb-1">Cantidad de Códigos</p>
-        <h3 class="font-headline-lg text-headline-lg text-on-surface" id="kpi-codigos">—</h3>
+        <div class="flex items-end gap-3">
+          <div>
+            <h3 class="font-headline-lg text-headline-lg text-on-surface" id="kpi-codigos">—</h3>
+            <span class="text-body-sm text-on-surface-variant font-medium">Sheet 1</span>
+          </div>
+          <span class="text-on-surface-variant text-[20px] font-bold pb-1">/</span>
+          <div>
+            <h3 class="font-headline-lg text-headline-lg text-secondary" id="kpi-codigos-sheet2">—</h3>
+            <span class="text-body-sm text-on-surface-variant font-medium">Sheet 2</span>
+          </div>
+        </div>
         <div class="flex items-center gap-1 mt-2 text-on-surface-variant text-body-sm">
           <span class="material-symbols-outlined text-[16px]">qr_code</span>
-          <span class="font-medium">SKUs Activos</span>
+          <span class="font-medium">SKUs Activos (comparativo)</span>
         </div>
       </div>
       <div class="bg-white border border-outline-variant p-5 rounded-lg shadow-sm">
@@ -581,21 +624,58 @@ function actualizarKPIs() {
   // códigos únicos sheet1
   const codigos = new Set(dataSaldo.map(r => r['CODIGO']).filter(Boolean));
 
+  // códigos únicos sheet2 — comparativo
+  const codigosSheet2 = new Set(dataMudanza.map(r => r['CODIGO']).filter(Boolean));
+
   // LPN únicos sheet2 — trim para evitar espacios fantasma
   const lpns = new Set(dataMudanza.map(r => (r['LPN']||'').trim().toUpperCase()).filter(Boolean));
 
-  const pct = totalSum > 0 ? Math.round((fisicoSum / totalSum) * 100) : 0;
+  const pct = totalSum > 0 ? (fisicoSum / totalSum) * 100 : 0;
+  const pctTxt = pct.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-  document.getElementById('kpi-total').textContent        = totalSum.toLocaleString();
-  document.getElementById('kpi-inventariada').textContent = fisicoSum.toLocaleString();
-  document.getElementById('kpi-codigos').textContent      = codigos.size.toLocaleString();
-  document.getElementById('kpi-paletas').textContent      = lpns.size.toLocaleString();
-  document.getElementById('kpi-pct').textContent          = `${pct}% completado`;
-  document.getElementById('donut-pct').textContent        = `${pct}%`;
+  document.getElementById('kpi-total').textContent        = totalSum.toLocaleString('en-US');
+  document.getElementById('kpi-inventariada').textContent = fisicoSum.toLocaleString('en-US');
+  document.getElementById('kpi-codigos').textContent      = codigos.size.toLocaleString('en-US');
+  document.getElementById('kpi-codigos-sheet2').textContent = codigosSheet2.size.toLocaleString('en-US');
+  document.getElementById('kpi-paletas').textContent      = lpns.size.toLocaleString('en-US');
+  document.getElementById('kpi-pct').textContent          = `${pctTxt}% completado`;
+  document.getElementById('donut-pct').textContent        = `${pctTxt}%`;
 
   const offset = 251.2 - (251.2 * pct / 100);
   document.getElementById('donut-arc').style.strokeDashoffset = offset;
 }
+
+// ════════════════════════════════════════════════════════
+// NOTIFICACIONES — resumen de estados
+// ════════════════════════════════════════════════════════
+function actualizarNotificaciones() {
+  const conteo = { SOBRANTE: 0, 'EN PROCESO': 0, PENDIENTE: 0 };
+  detalleCalc.forEach(r => {
+    if (conteo.hasOwnProperty(r.obs)) conteo[r.obs]++;
+  });
+
+  document.getElementById('notif-sobrante').textContent  = conteo.SOBRANTE.toLocaleString('en-US');
+  document.getElementById('notif-proceso').textContent   = conteo['EN PROCESO'].toLocaleString('en-US');
+  document.getElementById('notif-pendiente').textContent = conteo.PENDIENTE.toLocaleString('en-US');
+
+  const totalAlertas = conteo.SOBRANTE + conteo['EN PROCESO'] + conteo.PENDIENTE;
+  const badge = document.getElementById('notif-badge');
+  if (totalAlertas > 0) badge.classList.remove('hidden');
+  else                  badge.classList.add('hidden');
+}
+
+document.getElementById('btn-notif').addEventListener('click', (e) => {
+  e.stopPropagation();
+  document.getElementById('panel-notif').classList.toggle('hidden');
+});
+
+document.addEventListener('click', (e) => {
+  const panel = document.getElementById('panel-notif');
+  const btn   = document.getElementById('btn-notif');
+  if (!panel.contains(e.target) && e.target !== btn) {
+    panel.classList.add('hidden');
+  }
+});
 
 // ════════════════════════════════════════════════════════
 // EXPORT CSV (con clave)
@@ -685,6 +765,7 @@ async function cargarDatos() {
     ]);
     calcularDetalle();
     actualizarKPIs();
+    actualizarNotificaciones();
     renderDetalle();
     renderRegistro();
   } catch (err) {
