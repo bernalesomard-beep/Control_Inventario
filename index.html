@@ -289,13 +289,17 @@
           placeholder="Escribe el código..." type="text" autocomplete="off"/>
       </div>
     </div>
-    <!-- Select con códigos únicos -->
+    <!-- Select por estado -->
     <div class="flex flex-col gap-1 min-w-[200px]">
-      <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Seleccionar código</label>
+      <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Filtrar por estado</label>
       <div class="relative">
-        <select id="maestro-codigo-select"
+        <select id="maestro-estado-select"
           class="pl-3 pr-8 py-2 border border-outline-variant rounded-lg text-body-sm w-full focus:ring-1 focus:ring-primary focus:border-primary outline-none appearance-none bg-white">
-          <option value="">— Todos los códigos —</option>
+          <option value="">— Todos los estados —</option>
+          <option value="CONFORME">✅ Conforme</option>
+          <option value="EN PROCESO">🔵 En Proceso</option>
+          <option value="PENDIENTE">🔴 Pendiente</option>
+          <option value="SOBRANTE">🟣 Sobrante</option>
         </select>
         <span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-outline text-[16px] pointer-events-none">expand_more</span>
       </div>
@@ -306,9 +310,12 @@
       <span class="material-symbols-outlined text-[16px]">filter_alt_off</span>
       Limpiar maestro
     </button>
-    <!-- Indicador de filtro activo -->
+    <!-- Indicadores de filtro activo -->
     <span id="maestro-badge" class="hidden px-3 py-1 bg-primary/10 text-primary text-[11px] font-bold rounded-full border border-primary/20">
-      Filtrando: <span id="maestro-badge-txt"></span>
+      Código: <span id="maestro-badge-txt"></span>
+    </span>
+    <span id="maestro-estado-badge" class="hidden px-3 py-1 bg-secondary/10 text-secondary text-[11px] font-bold rounded-full border border-secondary/20">
+      Estado: <span id="maestro-estado-badge-txt"></span>
     </span>
   </div>
 
@@ -402,11 +409,11 @@
               <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Descripción</th>
               <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">EAN13</th>
               <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">EAN14</th>
+              <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap text-center">Físico</th>
               <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap text-center">FxE</th>
               <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Familia</th>
               <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Lote</th>
               <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Expira</th>
-              <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap text-center">Físico</th>
               <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Estatus Lote</th>
               <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Expira Nueva</th>
             </tr>
@@ -585,9 +592,21 @@ function getFilasRegistroFiltradas() {
   const fechaIni = document.getElementById('filtro-fecha-ini').value;
   const fechaFin = document.getElementById('filtro-fecha-fin').value;
 
+  // Construir set de códigos permitidos por filtro maestro de estado
+  let codigosEstado = null;
+  if (maestroEstadoActivo) {
+    codigosEstado = new Set(
+      detalleCalc
+        .filter(r => r.obs === maestroEstadoActivo)
+        .map(r => r.cod.toUpperCase())
+    );
+  }
+
   return dataMudanza.filter(r => {
     if (lpnF && !(r['LPN']||'').toUpperCase().includes(lpnF)) return false;
     if (codF && !(r['CODIGO']||'').toUpperCase().includes(codF)) return false;
+    // Filtrar por estado maestro: solo registros cuyo código tiene ese estado
+    if (codigosEstado && !codigosEstado.has((r['CODIGO']||'').toUpperCase())) return false;
     if (fechaIni || fechaFin) {
       const partes = (r['REGISTRO']||'').split(' ')[0].split('/');
       if (partes.length === 3) {
@@ -628,11 +647,11 @@ function renderRegistro() {
       <td class="px-3 py-3 whitespace-nowrap max-w-[220px] overflow-hidden text-ellipsis" title="${desc}">${desc}</td>
       <td class="px-3 py-3 font-label-mono text-on-surface-variant whitespace-nowrap">${r['EAN13']||''}</td>
       <td class="px-3 py-3 font-label-mono text-on-surface-variant whitespace-nowrap">${r['EAN14']||''}</td>
+      <td class="px-3 py-3 text-center font-bold text-on-surface">${r['FISICO']||''}</td>
       <td class="px-3 py-3 text-center font-semibold">${r['FxE']||''}</td>
       <td class="px-3 py-3 text-on-surface-variant whitespace-nowrap">${r['FAMILIA']||''}</td>
       <td class="px-3 py-3 font-label-mono whitespace-nowrap">${r['LOTE']||''}</td>
       <td class="px-3 py-3 whitespace-nowrap">${r['EXPIRA']||''}</td>
-      <td class="px-3 py-3 text-center font-bold text-on-surface">${r['FISICO']||''}</td>
       <td class="px-3 py-3 whitespace-nowrap">${badgeEstatus(est)}</td>
       <td class="px-3 py-3 whitespace-nowrap">${expN}</td>
     </tr>`;
@@ -858,11 +877,11 @@ document.getElementById('btn-export-registro').addEventListener('click', () => {
       { label:'Descripción',   key:'descripcion' },
       { label:'EAN13',         key:'ean13'       },
       { label:'EAN14',         key:'ean14'       },
+      { label:'Físico',        key:'fisico'      },
       { label:'FxE',           key:'fxe'         },
       { label:'Familia',       key:'familia'     },
       { label:'Lote',          key:'lote'        },
       { label:'Expira',        key:'expira'      },
-      { label:'Físico',        key:'fisico'      },
       { label:'Estatus Lote',  key:'estatus'     },
       { label:'Expira Nueva',  key:'expiraNueva' },
     ];
@@ -904,20 +923,9 @@ async function cargarDatos() {
 // FILTRO MAESTRO POR CÓDIGO
 // ════════════════════════════════════════════════════════
 function poblarSelectMaestro() {
-  const codigos = [...new Set(
-    [...dataSaldo.map(r => r['CODIGO']), ...dataMudanza.map(r => r['CODIGO'])]
-      .filter(Boolean)
-  )].sort();
-  const sel = document.getElementById('maestro-codigo-select');
-  const valorActual = sel.value;
-  sel.innerHTML = '<option value="">— Todos los códigos —</option>';
-  codigos.forEach(cod => {
-    const opt = document.createElement('option');
-    opt.value = cod; opt.textContent = cod;
-    sel.appendChild(opt);
-  });
-  // Restaurar selección si sigue existiendo
-  if (valorActual && codigos.includes(valorActual)) sel.value = valorActual;
+  // El select ahora es por estado, no necesita poblar opciones dinámicamente
+  // Solo restauramos el select de estado si ya había un valor
+  // (las opciones son estáticas en el HTML)
 }
 
 function aplicarFiltroMaestro(valor) {
@@ -925,7 +933,7 @@ function aplicarFiltroMaestro(valor) {
   // Propagar a ambos filtros individuales de código
   document.getElementById('filtro-codigo').value     = v;
   document.getElementById('filtro-codigo-reg').value = v;
-  // Actualizar badge
+  // Actualizar badge de código
   const badge    = document.getElementById('maestro-badge');
   const badgeTxt = document.getElementById('maestro-badge-txt');
   if (v) {
@@ -934,6 +942,30 @@ function aplicarFiltroMaestro(valor) {
   } else {
     badge.classList.add('hidden');
   }
+  // Renderizar ambas tablas
+  renderDetalle();
+  renderRegistro();
+}
+
+// Estado activo del filtro maestro por estado
+let maestroEstadoActivo = '';
+
+function aplicarFiltroMaestroEstado(estado) {
+  maestroEstadoActivo = (estado || '').trim();
+
+  // Propagar al filtro de estado del panel Detalle Código
+  document.getElementById('filtro-estado').value = maestroEstadoActivo;
+
+  // Actualizar badge de estado
+  const badge    = document.getElementById('maestro-estado-badge');
+  const badgeTxt = document.getElementById('maestro-estado-badge-txt');
+  if (maestroEstadoActivo) {
+    badgeTxt.textContent = maestroEstadoActivo;
+    badge.classList.remove('hidden');
+  } else {
+    badge.classList.add('hidden');
+  }
+
   // Renderizar ambas tablas
   renderDetalle();
   renderRegistro();
@@ -960,26 +992,35 @@ document.getElementById('maestro-codigo-input').addEventListener('input', functi
   aplicarFiltroMaestro(v);
 });
 
-// Filtro maestro — select
-document.getElementById('maestro-codigo-select').addEventListener('change', function() {
-  document.getElementById('maestro-codigo-input').value = this.value;
-  aplicarFiltroMaestro(this.value);
+// Filtro maestro — select por estado
+document.getElementById('maestro-estado-select').addEventListener('change', function() {
+  aplicarFiltroMaestroEstado(this.value);
 });
 
 // Limpiar maestro
 document.getElementById('btn-limpiar-maestro').addEventListener('click', () => {
   document.getElementById('maestro-codigo-input').value  = '';
-  document.getElementById('maestro-codigo-select').value = '';
+  document.getElementById('maestro-estado-select').value = '';
+  maestroEstadoActivo = '';
+  document.getElementById('maestro-estado-badge').classList.add('hidden');
+  document.getElementById('filtro-estado').value = '';
   aplicarFiltroMaestro('');
 });
 
 document.getElementById('btn-limpiar-detalle').addEventListener('click', () => {
   document.getElementById('filtro-codigo').value = '';
   document.getElementById('filtro-estado').value = '';
-  // Sincronizar maestro si el código que se limpia era el maestro activo
+  // Sincronizar maestro si había filtro de código activo
   const inp = document.getElementById('maestro-codigo-input');
-  if (inp.value) { inp.value = ''; document.getElementById('maestro-codigo-select').value = ''; aplicarFiltroMaestro(''); }
-  else renderDetalle();
+  if (inp.value) { inp.value = ''; aplicarFiltroMaestro(''); }
+  // Sincronizar maestro si había filtro de estado activo
+  if (maestroEstadoActivo) {
+    document.getElementById('maestro-estado-select').value = '';
+    maestroEstadoActivo = '';
+    document.getElementById('maestro-estado-badge').classList.add('hidden');
+    renderRegistro();
+  }
+  renderDetalle();
 });
 
 document.getElementById('btn-limpiar-registro').addEventListener('click', () => {
@@ -989,7 +1030,7 @@ document.getElementById('btn-limpiar-registro').addEventListener('click', () => 
   document.getElementById('filtro-codigo-reg').value = '';
   // Sincronizar maestro si el código que se limpia era el maestro activo
   const inp = document.getElementById('maestro-codigo-input');
-  if (inp.value) { inp.value = ''; document.getElementById('maestro-codigo-select').value = ''; aplicarFiltroMaestro(''); }
+  if (inp.value) { inp.value = ''; aplicarFiltroMaestro(''); }
   else renderRegistro();
 });
 
