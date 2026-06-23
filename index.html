@@ -587,12 +587,12 @@ function renderDetalle() {
 // RENDER REGISTRO
 // ════════════════════════════════════════════════════════
 function getFilasRegistroFiltradas() {
-  const lpnF    = (document.getElementById('filtro-lpn').value||'').toUpperCase();
-  const codF    = (document.getElementById('filtro-codigo-reg').value||'').toUpperCase();
+  const lpnF     = (document.getElementById('filtro-lpn').value||'').toUpperCase();
+  const codF     = (document.getElementById('filtro-codigo-reg').value||'').toUpperCase();
   const fechaIni = document.getElementById('filtro-fecha-ini').value;
   const fechaFin = document.getElementById('filtro-fecha-fin').value;
 
-  // Construir set de códigos permitidos por filtro maestro de estado
+  // Set de códigos que cumplen el estado maestro activo (si hay uno)
   let codigosEstado = null;
   if (maestroEstadoActivo) {
     codigosEstado = new Set(
@@ -603,10 +603,14 @@ function getFilasRegistroFiltradas() {
   }
 
   return dataMudanza.filter(r => {
+    const cod = (r['CODIGO']||'').toUpperCase();
+    // Filtro LPN
     if (lpnF && !(r['LPN']||'').toUpperCase().includes(lpnF)) return false;
-    if (codF && !(r['CODIGO']||'').toUpperCase().includes(codF)) return false;
-    // Filtrar por estado maestro: solo registros cuyo código tiene ese estado
-    if (codigosEstado && !codigosEstado.has((r['CODIGO']||'').toUpperCase())) return false;
+    // Filtro código (del maestro o del panel registro) — ambos pueden estar activos
+    if (codF && !cod.includes(codF)) return false;
+    // Filtro estado maestro — solo filas cuyo código tiene ese estado en detalleCalc
+    if (codigosEstado && !codigosEstado.has(cod)) return false;
+    // Filtro fechas
     if (fechaIni || fechaFin) {
       const partes = (r['REGISTRO']||'').split(' ')[0].split('/');
       if (partes.length === 3) {
@@ -930,7 +934,7 @@ function poblarSelectMaestro() {
 
 function aplicarFiltroMaestro(valor) {
   const v = (valor || '').trim();
-  // Propagar a ambos filtros individuales de código
+  // Propagar solo el código a los filtros individuales (sin tocar filtro-estado)
   document.getElementById('filtro-codigo').value     = v;
   document.getElementById('filtro-codigo-reg').value = v;
   // Actualizar badge de código
@@ -942,7 +946,7 @@ function aplicarFiltroMaestro(valor) {
   } else {
     badge.classList.add('hidden');
   }
-  // Renderizar ambas tablas
+  // Renderizar ambas tablas respetando también el estado activo
   renderDetalle();
   renderRegistro();
 }
@@ -985,10 +989,6 @@ document.getElementById('filtro-fecha-fin').addEventListener('change', renderReg
 // Filtro maestro — input texto
 document.getElementById('maestro-codigo-input').addEventListener('input', function() {
   const v = this.value.trim();
-  // Sincronizar select si hay match exacto
-  const sel = document.getElementById('maestro-codigo-select');
-  const opciones = [...sel.options].map(o => o.value);
-  sel.value = opciones.includes(v.toUpperCase()) ? v.toUpperCase() : '';
   aplicarFiltroMaestro(v);
 });
 
@@ -1008,19 +1008,17 @@ document.getElementById('btn-limpiar-maestro').addEventListener('click', () => {
 });
 
 document.getElementById('btn-limpiar-detalle').addEventListener('click', () => {
+  // Limpiar filtros locales del panel
   document.getElementById('filtro-codigo').value = '';
   document.getElementById('filtro-estado').value = '';
-  // Sincronizar maestro si había filtro de código activo
-  const inp = document.getElementById('maestro-codigo-input');
-  if (inp.value) { inp.value = ''; aplicarFiltroMaestro(''); }
-  // Sincronizar maestro si había filtro de estado activo
-  if (maestroEstadoActivo) {
-    document.getElementById('maestro-estado-select').value = '';
-    maestroEstadoActivo = '';
-    document.getElementById('maestro-estado-badge').classList.add('hidden');
-    renderRegistro();
-  }
+  // Limpiar filtros maestros sincronizados
+  document.getElementById('maestro-codigo-input').value  = '';
+  document.getElementById('maestro-estado-select').value = '';
+  document.getElementById('maestro-badge').classList.add('hidden');
+  document.getElementById('maestro-estado-badge').classList.add('hidden');
+  maestroEstadoActivo = '';
   renderDetalle();
+  renderRegistro();
 });
 
 document.getElementById('btn-limpiar-registro').addEventListener('click', () => {
@@ -1028,10 +1026,16 @@ document.getElementById('btn-limpiar-registro').addEventListener('click', () => 
   document.getElementById('filtro-fecha-fin').value = '';
   document.getElementById('filtro-lpn').value = '';
   document.getElementById('filtro-codigo-reg').value = '';
-  // Sincronizar maestro si el código que se limpia era el maestro activo
-  const inp = document.getElementById('maestro-codigo-input');
-  if (inp.value) { inp.value = ''; aplicarFiltroMaestro(''); }
-  else renderRegistro();
+  // Limpiar filtros maestros sincronizados
+  document.getElementById('maestro-codigo-input').value  = '';
+  document.getElementById('maestro-estado-select').value = '';
+  document.getElementById('maestro-badge').classList.add('hidden');
+  document.getElementById('maestro-estado-badge').classList.add('hidden');
+  maestroEstadoActivo = '';
+  document.getElementById('filtro-codigo').value = '';
+  document.getElementById('filtro-estado').value = '';
+  renderDetalle();
+  renderRegistro();
 });
 
 // ════════════════════════════════════════════════════════
