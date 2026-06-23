@@ -273,6 +273,45 @@
     </div>
   </section>
 
+  <!-- ═══ FILTRO MAESTRO POR CÓDIGO ═══ -->
+  <div class="bg-white border border-outline-variant rounded-lg shadow-sm px-5 py-4 flex flex-wrap items-end gap-4">
+    <div class="flex items-center gap-2">
+      <span class="material-symbols-outlined text-primary text-[22px]">manage_search</span>
+      <span class="font-semibold text-on-surface text-body-md whitespace-nowrap">Filtro Maestro</span>
+    </div>
+    <!-- Input texto libre -->
+    <div class="flex flex-col gap-1 flex-1 min-w-[200px]">
+      <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Buscar por código</label>
+      <div class="relative">
+        <span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-outline text-[16px]">search</span>
+        <input id="maestro-codigo-input"
+          class="pl-9 pr-3 py-2 border border-outline-variant rounded-lg text-body-sm w-full focus:ring-1 focus:ring-primary focus:border-primary outline-none"
+          placeholder="Escribe el código..." type="text" autocomplete="off"/>
+      </div>
+    </div>
+    <!-- Select con códigos únicos -->
+    <div class="flex flex-col gap-1 min-w-[200px]">
+      <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Seleccionar código</label>
+      <div class="relative">
+        <select id="maestro-codigo-select"
+          class="pl-3 pr-8 py-2 border border-outline-variant rounded-lg text-body-sm w-full focus:ring-1 focus:ring-primary focus:border-primary outline-none appearance-none bg-white">
+          <option value="">— Todos los códigos —</option>
+        </select>
+        <span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-outline text-[16px] pointer-events-none">expand_more</span>
+      </div>
+    </div>
+    <!-- Botón limpiar maestro -->
+    <button id="btn-limpiar-maestro"
+      class="flex items-center gap-1.5 px-4 py-2 text-on-surface-variant hover:text-primary hover:bg-primary/5 border border-outline-variant rounded-lg text-body-sm font-semibold transition-colors whitespace-nowrap">
+      <span class="material-symbols-outlined text-[16px]">filter_alt_off</span>
+      Limpiar maestro
+    </button>
+    <!-- Indicador de filtro activo -->
+    <span id="maestro-badge" class="hidden px-3 py-1 bg-primary/10 text-primary text-[11px] font-bold rounded-full border border-primary/20">
+      Filtrando: <span id="maestro-badge-txt"></span>
+    </span>
+  </div>
+
   <!-- ═══ DOS COLUMNAS ═══ -->
   <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
 
@@ -847,6 +886,7 @@ async function cargarDatos() {
     calcularDetalle();
     actualizarKPIs();
     actualizarNotificaciones();
+    poblarSelectMaestro();
     renderDetalle();
     renderRegistro();
   } catch (err) {
@@ -861,6 +901,45 @@ async function cargarDatos() {
 }
 
 // ════════════════════════════════════════════════════════
+// FILTRO MAESTRO POR CÓDIGO
+// ════════════════════════════════════════════════════════
+function poblarSelectMaestro() {
+  const codigos = [...new Set(
+    [...dataSaldo.map(r => r['CODIGO']), ...dataMudanza.map(r => r['CODIGO'])]
+      .filter(Boolean)
+  )].sort();
+  const sel = document.getElementById('maestro-codigo-select');
+  const valorActual = sel.value;
+  sel.innerHTML = '<option value="">— Todos los códigos —</option>';
+  codigos.forEach(cod => {
+    const opt = document.createElement('option');
+    opt.value = cod; opt.textContent = cod;
+    sel.appendChild(opt);
+  });
+  // Restaurar selección si sigue existiendo
+  if (valorActual && codigos.includes(valorActual)) sel.value = valorActual;
+}
+
+function aplicarFiltroMaestro(valor) {
+  const v = (valor || '').trim();
+  // Propagar a ambos filtros individuales de código
+  document.getElementById('filtro-codigo').value     = v;
+  document.getElementById('filtro-codigo-reg').value = v;
+  // Actualizar badge
+  const badge    = document.getElementById('maestro-badge');
+  const badgeTxt = document.getElementById('maestro-badge-txt');
+  if (v) {
+    badgeTxt.textContent = v;
+    badge.classList.remove('hidden');
+  } else {
+    badge.classList.add('hidden');
+  }
+  // Renderizar ambas tablas
+  renderDetalle();
+  renderRegistro();
+}
+
+// ════════════════════════════════════════════════════════
 // EVENTOS FILTROS
 // ════════════════════════════════════════════════════════
 document.getElementById('btn-actualizar').addEventListener('click', cargarDatos);
@@ -871,10 +950,36 @@ document.getElementById('filtro-codigo-reg').addEventListener('input', renderReg
 document.getElementById('filtro-fecha-ini').addEventListener('change', renderRegistro);
 document.getElementById('filtro-fecha-fin').addEventListener('change', renderRegistro);
 
+// Filtro maestro — input texto
+document.getElementById('maestro-codigo-input').addEventListener('input', function() {
+  const v = this.value.trim();
+  // Sincronizar select si hay match exacto
+  const sel = document.getElementById('maestro-codigo-select');
+  const opciones = [...sel.options].map(o => o.value);
+  sel.value = opciones.includes(v.toUpperCase()) ? v.toUpperCase() : '';
+  aplicarFiltroMaestro(v);
+});
+
+// Filtro maestro — select
+document.getElementById('maestro-codigo-select').addEventListener('change', function() {
+  document.getElementById('maestro-codigo-input').value = this.value;
+  aplicarFiltroMaestro(this.value);
+});
+
+// Limpiar maestro
+document.getElementById('btn-limpiar-maestro').addEventListener('click', () => {
+  document.getElementById('maestro-codigo-input').value  = '';
+  document.getElementById('maestro-codigo-select').value = '';
+  aplicarFiltroMaestro('');
+});
+
 document.getElementById('btn-limpiar-detalle').addEventListener('click', () => {
   document.getElementById('filtro-codigo').value = '';
   document.getElementById('filtro-estado').value = '';
-  renderDetalle();
+  // Sincronizar maestro si el código que se limpia era el maestro activo
+  const inp = document.getElementById('maestro-codigo-input');
+  if (inp.value) { inp.value = ''; document.getElementById('maestro-codigo-select').value = ''; aplicarFiltroMaestro(''); }
+  else renderDetalle();
 });
 
 document.getElementById('btn-limpiar-registro').addEventListener('click', () => {
@@ -882,7 +987,10 @@ document.getElementById('btn-limpiar-registro').addEventListener('click', () => 
   document.getElementById('filtro-fecha-fin').value = '';
   document.getElementById('filtro-lpn').value = '';
   document.getElementById('filtro-codigo-reg').value = '';
-  renderRegistro();
+  // Sincronizar maestro si el código que se limpia era el maestro activo
+  const inp = document.getElementById('maestro-codigo-input');
+  if (inp.value) { inp.value = ''; document.getElementById('maestro-codigo-select').value = ''; aplicarFiltroMaestro(''); }
+  else renderRegistro();
 });
 
 // ════════════════════════════════════════════════════════
