@@ -279,14 +279,15 @@
       <span class="material-symbols-outlined text-primary text-[22px]">manage_search</span>
       <span class="font-semibold text-on-surface text-body-md whitespace-nowrap">Filtro Maestro</span>
     </div>
-    <!-- Input texto libre -->
-    <div class="flex flex-col gap-1 flex-1 min-w-[200px]">
-      <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Buscar por código</label>
+    <!-- Select código (se filtra según estado) -->
+    <div class="flex flex-col gap-1 min-w-[220px]">
+      <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Seleccionar código</label>
       <div class="relative">
-        <span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-outline text-[16px]">search</span>
-        <input id="maestro-codigo-input"
-          class="pl-9 pr-3 py-2 border border-outline-variant rounded-lg text-body-sm w-full focus:ring-1 focus:ring-primary focus:border-primary outline-none"
-          placeholder="Escribe el código..." type="text" autocomplete="off"/>
+        <select id="maestro-codigo-input"
+          class="pl-3 pr-8 py-2 border border-outline-variant rounded-lg text-body-sm w-full focus:ring-1 focus:ring-primary focus:border-primary outline-none appearance-none bg-white">
+          <option value="">— Todos los códigos —</option>
+        </select>
+        <span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-outline text-[16px] pointer-events-none">expand_more</span>
       </div>
     </div>
     <!-- Select por estado -->
@@ -558,10 +559,22 @@ function renderDetalle() {
   const busq   = (document.getElementById('filtro-codigo').value||'').toUpperCase();
   const estado = document.getElementById('filtro-estado').value;
 
-  const filas = detalleCalc.filter(r =>
+  let filas = detalleCalc.filter(r =>
     (!busq   || r.cod.toUpperCase().includes(busq)) &&
     (!estado || r.obs === estado)
   );
+
+  // Orden automático según estado activo
+  if (estado === 'SOBRANTE') {
+    // pend es negativo → de menor (más negativo) a mayor
+    filas = [...filas].sort((a, b) => a.pend - b.pend);
+  } else if (estado === 'EN PROCESO') {
+    // de mayor pendiente a menor
+    filas = [...filas].sort((a, b) => b.pend - a.pend);
+  } else if (estado === 'PENDIENTE' || estado === 'CONFORME') {
+    // correlativo de código alfabético
+    filas = [...filas].sort((a, b) => a.cod.localeCompare(b.cod));
+  }
 
   const tbody = document.getElementById('tbody-detalle');
   if (!filas.length) {
@@ -909,7 +922,7 @@ async function cargarDatos() {
     calcularDetalle();
     actualizarKPIs();
     actualizarNotificaciones();
-    poblarSelectMaestro();
+    poblarSelectMaestro('');
     renderDetalle();
     renderRegistro();
   } catch (err) {
@@ -926,10 +939,23 @@ async function cargarDatos() {
 // ════════════════════════════════════════════════════════
 // FILTRO MAESTRO POR CÓDIGO
 // ════════════════════════════════════════════════════════
-function poblarSelectMaestro() {
-  // El select ahora es por estado, no necesita poblar opciones dinámicamente
-  // Solo restauramos el select de estado si ya había un valor
-  // (las opciones son estáticas en el HTML)
+function poblarSelectMaestro(estadoFiltro) {
+  // Obtener códigos filtrados por estado (o todos si no hay estado)
+  const fuente = estadoFiltro
+    ? detalleCalc.filter(r => r.obs === estadoFiltro).map(r => r.cod)
+    : [...new Set([...dataSaldo.map(r => r['CODIGO']), ...dataMudanza.map(r => r['CODIGO'])].filter(Boolean))].sort();
+
+  const sel = document.getElementById('maestro-codigo-input');
+  const valorActual = sel.value;
+  sel.innerHTML = '<option value="">— Todos los códigos —</option>';
+  fuente.forEach(cod => {
+    const opt = document.createElement('option');
+    opt.value = cod; opt.textContent = cod;
+    sel.appendChild(opt);
+  });
+  // Restaurar selección si sigue disponible
+  if (valorActual && fuente.includes(valorActual)) sel.value = valorActual;
+  else sel.value = '';
 }
 
 function aplicarFiltroMaestro(valor) {
@@ -960,6 +986,15 @@ function aplicarFiltroMaestroEstado(estado) {
   // Propagar al filtro de estado del panel Detalle Código
   document.getElementById('filtro-estado').value = maestroEstadoActivo;
 
+  // Repoblar el select de código según el estado activo
+  poblarSelectMaestro(maestroEstadoActivo);
+
+  // Limpiar selección de código si ya no aplica
+  document.getElementById('maestro-codigo-input').value = '';
+  document.getElementById('filtro-codigo').value = '';
+  document.getElementById('filtro-codigo-reg').value = '';
+  document.getElementById('maestro-badge').classList.add('hidden');
+
   // Actualizar badge de estado
   const badge    = document.getElementById('maestro-estado-badge');
   const badgeTxt = document.getElementById('maestro-estado-badge-txt');
@@ -986,10 +1021,9 @@ document.getElementById('filtro-codigo-reg').addEventListener('input', renderReg
 document.getElementById('filtro-fecha-ini').addEventListener('change', renderRegistro);
 document.getElementById('filtro-fecha-fin').addEventListener('change', renderRegistro);
 
-// Filtro maestro — input texto
-document.getElementById('maestro-codigo-input').addEventListener('input', function() {
-  const v = this.value.trim();
-  aplicarFiltroMaestro(v);
+// Filtro maestro — select código
+document.getElementById('maestro-codigo-input').addEventListener('change', function() {
+  aplicarFiltroMaestro(this.value);
 });
 
 // Filtro maestro — select por estado
@@ -999,24 +1033,30 @@ document.getElementById('maestro-estado-select').addEventListener('change', func
 
 // Limpiar maestro
 document.getElementById('btn-limpiar-maestro').addEventListener('click', () => {
-  document.getElementById('maestro-codigo-input').value  = '';
-  document.getElementById('maestro-estado-select').value = '';
   maestroEstadoActivo = '';
+  document.getElementById('maestro-estado-select').value = '';
   document.getElementById('maestro-estado-badge').classList.add('hidden');
   document.getElementById('filtro-estado').value = '';
-  aplicarFiltroMaestro('');
+  // Repoblar select con todos los códigos y limpiar selección
+  poblarSelectMaestro('');
+  document.getElementById('maestro-codigo-input').value = '';
+  document.getElementById('maestro-badge').classList.add('hidden');
+  document.getElementById('filtro-codigo').value = '';
+  document.getElementById('filtro-codigo-reg').value = '';
+  renderDetalle();
+  renderRegistro();
 });
 
 document.getElementById('btn-limpiar-detalle').addEventListener('click', () => {
-  // Limpiar filtros locales del panel
   document.getElementById('filtro-codigo').value = '';
   document.getElementById('filtro-estado').value = '';
-  // Limpiar filtros maestros sincronizados
-  document.getElementById('maestro-codigo-input').value  = '';
   document.getElementById('maestro-estado-select').value = '';
   document.getElementById('maestro-badge').classList.add('hidden');
   document.getElementById('maestro-estado-badge').classList.add('hidden');
   maestroEstadoActivo = '';
+  poblarSelectMaestro('');
+  document.getElementById('maestro-codigo-input').value = '';
+  document.getElementById('filtro-codigo-reg').value = '';
   renderDetalle();
   renderRegistro();
 });
@@ -1026,14 +1066,14 @@ document.getElementById('btn-limpiar-registro').addEventListener('click', () => 
   document.getElementById('filtro-fecha-fin').value = '';
   document.getElementById('filtro-lpn').value = '';
   document.getElementById('filtro-codigo-reg').value = '';
-  // Limpiar filtros maestros sincronizados
-  document.getElementById('maestro-codigo-input').value  = '';
   document.getElementById('maestro-estado-select').value = '';
   document.getElementById('maestro-badge').classList.add('hidden');
   document.getElementById('maestro-estado-badge').classList.add('hidden');
   maestroEstadoActivo = '';
   document.getElementById('filtro-codigo').value = '';
   document.getElementById('filtro-estado').value = '';
+  poblarSelectMaestro('');
+  document.getElementById('maestro-codigo-input').value = '';
   renderDetalle();
   renderRegistro();
 });
