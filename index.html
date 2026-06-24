@@ -188,8 +188,8 @@
     <div class="flex items-center gap-8">
       <span class="font-display text-[24px] text-primary font-bold">Control de inventarios</span>
       <nav class="hidden md:flex gap-6 items-center">
-        <a class="font-body-md text-body-md text-primary font-semibold border-b-2 border-primary pb-1 cursor-pointer" href="#">Dashboard</a>
-        <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors cursor-pointer" href="#">Reports</a>
+        <a id="tab-dashboard" class="font-body-md text-body-md text-primary font-semibold border-b-2 border-primary pb-1 cursor-pointer" href="#">Dashboard</a>
+        <a id="tab-reports" class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors cursor-pointer" href="#">Reports</a>
       </nav>
     </div>
     <div class="flex items-center gap-4">
@@ -245,6 +245,7 @@
   </div>
 </header>
 
+<div id="view-dashboard">
 <main class="max-w-container-max mx-auto px-gutter py-8 space-y-8">
 
   <!-- ═══ KPIs ═══ -->
@@ -481,8 +482,109 @@
     </section>
   </div>
 </main>
+</div><!-- /view-dashboard -->
 
-<footer class="mt-12 bg-white border-t border-outline-variant py-8">
+<!-- ═══════════════════════════════════════════════════════
+     REPORTS — Sheet 2 completo (sin columna A)
+═══════════════════════════════════════════════════════ -->
+<div id="view-reports" class="hidden">
+<main class="max-w-container-max mx-auto px-gutter py-8 space-y-6">
+
+  <!-- Cabecera Reports -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h2 class="text-[22px] font-bold text-on-surface">Reports — Detalle Sheet 2</h2>
+      <p class="text-body-sm text-on-surface-variant mt-0.5">Todos los registros de mudanza / conteo físico</p>
+    </div>
+    <div class="flex items-center gap-2">
+      <span id="rpt-lbl-sel" class="hidden text-body-sm font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full"></span>
+      <button id="rpt-btn-export" title="Exportar XLS"
+        class="flex items-center gap-1.5 px-3 py-2 border border-outline-variant rounded-lg text-body-sm font-semibold hover:bg-surface-container transition-all">
+        <span class="material-symbols-outlined text-[18px]">download</span> Exportar
+      </button>
+    </div>
+  </div>
+
+  <!-- Filtros Reports (mismos que Registro) -->
+  <div class="bg-white border border-outline-variant rounded-xl px-5 py-4 flex flex-wrap items-end gap-3">
+    <div class="flex flex-col gap-1">
+      <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Fecha desde</label>
+      <input id="rpt-fecha-ini" type="date" class="px-3 py-2 border border-outline-variant rounded-lg text-body-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none" style="min-width:130px;">
+    </div>
+    <div class="flex flex-col gap-1">
+      <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Fecha hasta</label>
+      <input id="rpt-fecha-fin" type="date" class="px-3 py-2 border border-outline-variant rounded-lg text-body-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none" style="min-width:130px;">
+    </div>
+    <div class="flex flex-col gap-1">
+      <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">LPN</label>
+      <input id="rpt-lpn" type="text" placeholder="LPN..." class="px-3 py-2 border border-outline-variant rounded-lg text-body-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none" style="min-width:110px;">
+    </div>
+    <div class="flex flex-col gap-1">
+      <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Código</label>
+      <input id="rpt-codigo" type="text" placeholder="Código..." class="px-3 py-2 border border-outline-variant rounded-lg text-body-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none" style="min-width:110px;">
+    </div>
+    <div class="flex flex-col gap-1">
+      <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Usuario</label>
+      <input id="rpt-usuario" type="text" placeholder="Usuario..." class="px-3 py-2 border border-outline-variant rounded-lg text-body-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none" style="min-width:110px;">
+    </div>
+    <button id="rpt-btn-limpiar"
+      class="flex items-center gap-1.5 px-3 py-2 border border-outline-variant rounded-lg text-body-sm font-semibold hover:bg-surface-container transition-all">
+      <span class="material-symbols-outlined text-[16px]">filter_list_off</span> Limpiar
+    </button>
+    <span class="text-body-sm text-on-surface-variant ml-auto font-medium" id="rpt-contador">— registros</span>
+  </div>
+
+  <!-- Tabla Reports -->
+  <div class="bg-white border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+    <div class="table-wrap" style="max-height:620px; overflow:auto;">
+      <table class="text-left border-collapse w-full" style="table-layout:fixed; width:100%;">
+        <colgroup>
+          <col style="width:36px;">          <!-- checkbox -->
+          <col style="width:140px;">         <!-- Registro -->
+          <col style="width:90px;">          <!-- Usuario -->
+          <col style="width:90px;">          <!-- LPN -->
+          <col style="width:90px;">          <!-- Código -->
+          <col style="min-width:180px;">     <!-- Descripción -->
+          <col style="width:120px;">         <!-- EAN13 -->
+          <col style="width:120px;">         <!-- EAN14 -->
+          <col style="width:60px;">          <!-- Físico -->
+          <col style="width:55px;">          <!-- FxE -->
+          <col style="width:100px;">         <!-- Familia -->
+          <col style="width:100px;">         <!-- Lote -->
+          <col style="width:90px;">          <!-- Expira -->
+          <col style="width:110px;">         <!-- Estatus Lote -->
+          <col style="width:100px;">         <!-- Expira Nueva -->
+        </colgroup>
+        <thead>
+          <tr class="bg-inverse-surface">
+            <th class="px-3 py-4 text-white">
+              <input type="checkbox" id="rpt-chk-all" title="Seleccionar todo">
+            </th>
+            <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Registro</th>
+            <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Usuario</th>
+            <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">LPN</th>
+            <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Código</th>
+            <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white">Descripción</th>
+            <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">EAN13</th>
+            <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">EAN14</th>
+            <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap text-center">Físico</th>
+            <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap text-center">FxE</th>
+            <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Familia</th>
+            <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Lote</th>
+            <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Expira</th>
+            <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Estatus Lote</th>
+            <th class="px-3 py-4 font-body-sm font-bold uppercase tracking-wider text-[10px] text-white whitespace-nowrap">Expira Nueva</th>
+          </tr>
+        </thead>
+        <tbody id="rpt-tbody" class="text-body-sm divide-y divide-outline-variant">
+          <tr><td colspan="15" class="px-4 py-8 text-center text-on-surface-variant">Cargando datos...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+</div><!-- /view-reports -->
   <div class="max-w-container-max mx-auto px-gutter flex flex-col md:flex-row justify-between items-center gap-6">
     <div class="flex items-center gap-3">
       <span class="font-display text-body-lg text-primary font-bold">Control de inventarios</span>
@@ -1223,6 +1325,136 @@ document.getElementById('btn-limpiar-registro').addEventListener('click', () => 
 // INIT
 // ════════════════════════════════════════════════════════
 cargarDatos();
+// ════════════════════════════════════════════════════════
+// NAVEGACIÓN DASHBOARD / REPORTS
+// ════════════════════════════════════════════════════════
+let _vistaActual = 'dashboard';
+
+function mostrarVista(v) {
+  _vistaActual = v;
+  document.getElementById('view-dashboard').classList.toggle('hidden', v !== 'dashboard');
+  document.getElementById('view-reports').classList.toggle('hidden', v !== 'reports');
+
+  const tDash = document.getElementById('tab-dashboard');
+  const tRep  = document.getElementById('tab-reports');
+  if (v === 'dashboard') {
+    tDash.className = 'font-body-md text-body-md text-primary font-semibold border-b-2 border-primary pb-1 cursor-pointer';
+    tRep.className  = 'font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors cursor-pointer';
+  } else {
+    tRep.className  = 'font-body-md text-body-md text-primary font-semibold border-b-2 border-primary pb-1 cursor-pointer';
+    tDash.className = 'font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors cursor-pointer';
+    renderReports();
+  }
+}
+
+document.getElementById('tab-dashboard').addEventListener('click', e => { e.preventDefault(); mostrarVista('dashboard'); });
+document.getElementById('tab-reports').addEventListener('click',   e => { e.preventDefault(); mostrarVista('reports'); });
+
+// ════════════════════════════════════════════════════════
+// REPORTS — filtrado y render
+// ════════════════════════════════════════════════════════
+let filasReportsActuales = [];
+
+function getFilasReports() {
+  const lpn     = (document.getElementById('rpt-lpn').value    || '').toUpperCase().trim();
+  const cod     = (document.getElementById('rpt-codigo').value  || '').toUpperCase().trim();
+  const usr     = (document.getElementById('rpt-usuario').value || '').toUpperCase().trim();
+  const fIni    = document.getElementById('rpt-fecha-ini').value;
+  const fFin    = document.getElementById('rpt-fecha-fin').value;
+
+  return dataMudanza.filter(r => {
+    if (lpn && !(r['LPN']||'').toUpperCase().includes(lpn)) return false;
+    if (cod && !(r['CODIGO']||'').toUpperCase().includes(cod)) return false;
+    if (usr && !(r['USUARIO']||'').toUpperCase().includes(usr)) return false;
+    if (fIni || fFin) {
+      // parsear fecha del campo REGISTRO "dd/mm/aaaa hh:mm:ss"
+      const raw = (r['REGISTRO']||'').split(' ')[0];
+      const [d, m, y] = raw.split('/');
+      const iso = y && m && d ? `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}` : '';
+      if (fIni && iso < fIni) return false;
+      if (fFin && iso > fFin) return false;
+    }
+    return true;
+  });
+}
+
+function renderReports() {
+  filasReportsActuales = getFilasReports();
+  const tbody = document.getElementById('rpt-tbody');
+  document.getElementById('rpt-chk-all').checked = false;
+  actualizarLblSeleccionRpt();
+  document.getElementById('rpt-contador').textContent = filasReportsActuales.length.toLocaleString('en-US') + ' registros';
+
+  if (!filasReportsActuales.length) {
+    tbody.innerHTML = '<tr><td colspan="15" class="px-4 py-8 text-center text-on-surface-variant">Sin resultados</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = filasReportsActuales.map((r, i) => {
+    const cls  = i % 2 === 0 ? '' : 'bg-[#f8faff]';
+    const desc = r['DESCRIPCCION'] || '';
+    const est  = r['ESTATUS LOTE'] || r['ESTATUS_LOTE'] || '';
+    const expN = r['EXPIRA NUEVA'] || r['EXPIRA_NUEVA'] || '';
+    const td   = 'class="px-3 py-2.5 text-[12px] overflow-hidden text-ellipsis whitespace-nowrap"';
+    return `<tr class="${cls} hover:bg-[#eff4ff] transition-colors">
+      <td class="px-3 py-2.5 text-center"><input type="checkbox" class="rpt-chk-fila" data-idx="${i}"></td>
+      <td ${td} style="color:#737686;font-family:monospace;">${r['REGISTRO']||''}</td>
+      <td ${td} style="font-weight:500;">${r['USUARIO']||''}</td>
+      <td ${td} style="font-family:monospace;color:#004ac6;font-weight:700;">${r['LPN']||''}</td>
+      <td ${td} style="font-family:monospace;">${r['CODIGO']||''}</td>
+      <td class="px-3 py-2.5 text-[12px] overflow-hidden text-ellipsis whitespace-nowrap" title="${escapeHTML(desc)}">${escapeHTML(desc)}</td>
+      <td ${td} style="color:#737686;font-family:monospace;">${r['EAN13']||''}</td>
+      <td ${td} style="color:#737686;font-family:monospace;">${r['EAN14']||''}</td>
+      <td class="px-3 py-2.5 text-[12px] text-center font-bold">${r['FISICO']||''}</td>
+      <td class="px-3 py-2.5 text-[12px] text-center font-semibold">${r['FxE']||''}</td>
+      <td ${td} style="color:#737686;">${r['FAMILIA']||''}</td>
+      <td ${td} style="font-family:monospace;">${r['LOTE']||''}</td>
+      <td ${td}>${r['EXPIRA']||''}</td>
+      <td class="px-3 py-2.5 text-[12px] overflow-hidden">${badgeEstatus(est)}</td>
+      <td ${td}>${expN}</td>
+    </tr>`;
+  }).join('');
+
+  tbody.querySelectorAll('.rpt-chk-fila').forEach(c => c.addEventListener('change', actualizarLblSeleccionRpt));
+}
+
+function actualizarLblSeleccionRpt() {
+  const sel = document.querySelectorAll('.rpt-chk-fila:checked').length;
+  const lbl = document.getElementById('rpt-lbl-sel');
+  if (sel > 0) { lbl.textContent = `${sel} sel.`; lbl.classList.remove('hidden'); }
+  else         { lbl.classList.add('hidden'); }
+}
+
+document.getElementById('rpt-chk-all').addEventListener('change', function() {
+  document.querySelectorAll('.rpt-chk-fila').forEach(c => { c.checked = this.checked; });
+  actualizarLblSeleccionRpt();
+});
+
+['rpt-lpn','rpt-codigo','rpt-usuario'].forEach(id =>
+  document.getElementById(id).addEventListener('input', renderReports));
+['rpt-fecha-ini','rpt-fecha-fin'].forEach(id =>
+  document.getElementById(id).addEventListener('change', renderReports));
+
+document.getElementById('rpt-btn-limpiar').addEventListener('click', () => {
+  ['rpt-lpn','rpt-codigo','rpt-usuario','rpt-fecha-ini','rpt-fecha-fin'].forEach(id =>
+    document.getElementById(id).value = '');
+  renderReports();
+});
+
+// Exportar Reports
+document.getElementById('rpt-btn-export').addEventListener('click', () => {
+  const sel = [...document.querySelectorAll('.rpt-chk-fila:checked')].map(c => parseInt(c.dataset.idx));
+  const data = sel.length ? sel.map(i => filasReportsActuales[i]) : filasReportsActuales;
+  const headers = [
+    {key:'REGISTRO',label:'REGISTRO'},{key:'USUARIO',label:'USUARIO'},{key:'LPN',label:'LPN'},
+    {key:'CODIGO',label:'CODIGO'},{key:'DESCRIPCCION',label:'DESCRIPCION'},{key:'EAN13',label:'EAN13'},
+    {key:'EAN14',label:'EAN14'},{key:'FISICO',label:'FISICO'},{key:'FxE',label:'FxE'},
+    {key:'FAMILIA',label:'FAMILIA'},{key:'LOTE',label:'LOTE'},{key:'EXPIRA',label:'EXPIRA'},
+    {key:'ESTATUS LOTE',label:'ESTATUS LOTE'},{key:'EXPIRA NUEVA',label:'EXPIRA NUEVA'}
+  ];
+  exportXLS(headers, data, 'reports_sheet2.xls');
+});
+
 </script>
 </body>
 </html>
